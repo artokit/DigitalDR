@@ -1,0 +1,53 @@
+<html lang="ru-ru">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}" type="text/css">
+    <title>О проекте</title>
+    <script src="{% static 'js/script.js' %}"></script>
+</head>
+<body onload="setInterval(f, 9000); setInterval(animateRoad, 100);">
+<header class="header">
+    <div class="wrap">
+        <h1 class="valve">Электронная Столовая</h1>
+    </div>
+</header>
+<section>
+    <div id="road"></div>
+    <div class="table">
+        <div class="top"></div>
+    </div>
+    <hr class="small_hr">
+    <div class="hello_text">
+        <h2>Надоели проблемы со столовой?<br></h2><strong>Мы их решим!</strong>
+    </div>
+    <div class="auth_block">
+        <button class="btn auth_btn">Войти</button>
+        <button class="btn reg_btn" onclick="viewRegForm()">Зарегистрироваться</button>
+    </div>
+</section>
+<section class="registration">
+    <form action="{% url 'about' %}" class="form_reg" method="post">
+        {% csrf_token %}
+        <div class="form_reg__header">
+            Регистрация
+        </div>
+        <div class="form_reg__body">
+            <div class="full_name">
+                {{ form.first_name }}
+                {{ form.last_name }}
+            </div>
+            {{ form.email }}
+            {{ form.username }}
+            {{ form.password1 }}
+            {{ form.password2 }}
+        </div>
+        <hr class="big_hr">
+        <button type="submit" class="btn form_reg__footer">Завершить регистрацию</button>
+    </form>
+</section>
+</body>
+</html>
