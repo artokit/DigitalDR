@@ -15,6 +15,41 @@
         <h1 class="valve">Электронная Столовая</h1>
     </div>
 </header>
+<div class="wrap_login">
+    <div class="close"></div>
+    <div class="login">
+        <div class="login__choice">
+            <div id="teacher" onclick="replaceBlock(this)">
+                Учитель
+            </div>
+            <div id="student" class="active" onclick="replaceBlock(this)">
+                Ученик
+            </div>
+        </div>
+        <div class="login__sform login__form">
+            <div class="username">
+                <label for=".username__input">Логин:</label>
+                <input type="text" class="username__input">
+            </div>
+            <div class="password">
+                <label for=".password__input">Пароль:</label>
+                <input type="password" class="password__input">
+            </div>
+            <div class="btn_login">
+                <button type="submit" class="btn_student" onclick="login()">Войти</button>
+            </div>
+        </div>
+        <div class="login__tform login__form">
+            <div class="code">
+                <label for=".code__input">Код учителя:</label>
+                <input type="text" class="code__input">
+            </div>
+            <div class="btn_login">
+                <button type="submit" class="btn_teacher" onclick="login()">Войти</button>
+            </div>
+        </div>
+    </div>
+</div>
 <section>
     <div id="road"></div>
     <div class="table">
@@ -25,29 +60,42 @@
         <h2>Надоели проблемы со столовой?<br></h2><strong>Мы их решим!</strong>
     </div>
     <div class="auth_block">
-        <button class="btn auth_btn">Войти</button>
+        <button class="btn auth_btn" onclick="ModalLogin()">Войти</button>
         <button class="btn reg_btn" onclick="viewRegForm()">Зарегистрироваться</button>
     </div>
 </section>
 <section class="registration">
-    <form action="{% url 'about' %}" class="form_reg" method="post">
+    <div class="form_reg">
         {% csrf_token %}
         <div class="form_reg__header">
             Регистрация
         </div>
+        <div class="demarcation">
+            <img src="/static/images/demarcation.svg" alt="demarcation">
+        </div>
         <div class="form_reg__body">
             <div class="full_name">
-                {{ form.first_name }}
-                {{ form.last_name }}
+                <input type="text" name="first_name" placeholder="Имя" required="" id="id_first_name">
+                <input type="text" name="last_name" placeholder="Фамилия" required="" id="id_last_name">
             </div>
-            {{ form.email }}
-            {{ form.username }}
-            {{ form.password1 }}
-            {{ form.password2 }}
+            <input type="text" name="email" placeholder="Email" required="" id="id_email">
+            <input type="text" name="username" placeholder="Логин" autofocus="" required="" id="id_username">
+            <input type="password" name="password1" placeholder="Пароль" required="" id="id_password1">
+            <input type="password" name="password2" placeholder="Подтвердите пароль" required="" id="id_password2">
+            <label for="id_select_class">Выберите класс: </label>
+            <select id="id_select_class">
+                <option></option>
+                {% for c in select %}
+                <option>{{c.name_class}}</option>
+                {% endfor %}
+            </select>
+            <div class="error_messages"></div>
         </div>
-        <hr class="big_hr">
-        <button type="submit" class="btn form_reg__footer">Завершить регистрацию</button>
-    </form>
+        <div class="demarcation180">
+            <img src="/static/images/demarcation.svg" alt="">
+        </div>
+        <button class="btn form_reg__footer" onclick="add_new_user()">Завершить регистрацию</button>
+    </div>
 </section>
 </body>
 </html>

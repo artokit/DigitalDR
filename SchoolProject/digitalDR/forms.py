@@ -11,9 +11,9 @@ class UserRegisterForm(UserCreationForm):
     last_name = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Фамилия'}))
     username = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Логин'}))
     email = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Email'}))
-    password1 = forms.CharField(label='', widget=forms.PasswordInput(attrs={'type': 'password', 'placeholder': 'Пароль'}))
-    password2 = forms.CharField(label='', widget=forms.PasswordInput(attrs={'type': 'password', 'placeholder': 'Подтвердите пароль'}))
+    password = forms.CharField(label='', widget=forms.PasswordInput(attrs={'type': 'password', 'placeholder': 'Пароль'}))
+    user_class = forms.CharField(max_length=150, label='', widget=forms.PasswordInput(attrs={'placeholder': 'Введите класс'}))
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'user_class')

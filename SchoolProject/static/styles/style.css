@@ -87,7 +87,7 @@ header h1 {
 
 input[type='text'],
 input[type='password'] {
-    border: none;
+    border: 1px solid #e2e8b6;
     outline: none;
     background-color: #e2e8b6;
     padding: 10px;
@@ -248,6 +248,7 @@ hr {
 .form_reg__header {
     padding: 15px;
     font-size: 32px;
+    text-align: center;
 }
 
 .form_reg__body {
@@ -297,7 +298,7 @@ hr {
 }
 
 .other {
-    background-color: #753d90;
+    background-color: #9d56c1;
 }
 
 .lunch {
@@ -358,6 +359,19 @@ hr {
     overflow-y: scroll;
 }
 
+.modal_window::-webkit-scrollbar-track {
+    background-color: #719f43;
+}
+
+.modal_window::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #333;
+}
+
+.modal_window::-webkit-scrollbar {
+    width: 5px;
+}
+
 .back {
     width: 100vw;
     height: 100vh;
@@ -379,6 +393,11 @@ hr {
     right: 30px;
     background-size: contain;
     cursor: pointer;
+    transition: 1s;
+}
+
+.close:hover {
+    transform: rotateZ(360deg);
 }
 
 #load {
@@ -389,8 +408,6 @@ hr {
     height: 100vh;
     position: absolute;
     margin: auto;
-    top: 0;
-    bottom: 0;
     left: 0;
     right: 0;
     z-index: 99;
@@ -414,6 +431,30 @@ hr {
     flex-shrink: 0;
 }
 
+.demarcation img {
+    width: 100%;
+}
+
+.demarcation180 img {
+    transform: rotateZ(180deg);
+    width: 100%;
+}
+
+.error_messages {
+    margin: 30px 0 0;
+    color: #ed7d7d;
+    font-size: 24px;
+}
+
+select {
+    width: 100px;
+    height: 30px;
+    outline: none;
+    margin-left: 15%;
+    font-size: 14pt;
+    border: 1px solid black;
+}
+
 @keyframes show_modal_window {
     0% {
         width: 0;
@@ -433,6 +474,7 @@ hr {
         margin: auto;
     }
 }
+
 @keyframes show {
     0% {
         transform: translateX(-5vw);
@@ -470,4 +512,131 @@ hr {
     100% {
         opacity: 1;
     }
+}
+
+@keyframes error_elem_anim {
+    0% {
+        border: 1px solid #e2e8b6;
+    }
+
+    50% {
+        border: 1px solid rgb(237, 125, 125);
+    }
+
+    100% {
+        border: 1px solid #e2e8b6;
+    }
+}
+
+@keyframes error_elem_anim_from_black {
+    0% {
+        border: 1px solid black;
+    }
+
+    50% {
+        border: 1px solid rgb(237, 125, 125);
+    }
+
+    100% {
+        border: 1px solid black;
+    }
+}
+
+.login {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: white;
+    width: 80vw;
+    height: 50vh;
+    max-width: 896px;
+}
+
+.wrap_login {
+    background-color: rgba(0, 0, 0, .3);
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    z-index: 100;
+    display: none;
+}
+
+.login__choice {
+    display: flex;
+}
+
+.login__choice div {
+    flex-basis: 50%;
+    text-align: center;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.login input {
+    width: 100%;
+    height: 50px;
+    border-radius: 0;
+    background-color: #c5c5c5;
+    border: 2px white solid;
+    transition: .3s;
+}
+
+.login input:focus {
+    transition: .3s;
+    border: 2px #63b8b8 solid;
+}
+
+.code, .username, .password {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login__form {
+    padding: 15px;
+}
+
+.code__input, .username__input, .password__input {
+    flex-basis: 80%;
+}
+
+.btn_login button {
+    border: 0;
+    padding: 10px 30px;
+    color: white;
+    background-color: #63b8b8;
+    transition: .5s;
+}
+
+.btn_login button:hover {
+    box-shadow: 3px -3px rgba(99, 184, 184, 0.7), 6px -6px rgba(99, 184, 184, 0.4);
+    transition: .5s;
+}
+
+.btn_login {
+    text-align: center;
+    margin: 100px 0;
+}
+
+.login__tform, .login__sform {
+    position: absolute;
+    width: 100%;
+}
+
+.login__tform {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.login__choice .active {
+    background-color: #63b8b8;
+    color: white;
+}
+
+.username {
+    margin-bottom: 30px;
 }
