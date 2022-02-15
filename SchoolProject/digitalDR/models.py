@@ -39,14 +39,7 @@ class CustomUser(models.Model):
         unique=True,
         verbose_name='Код'
     )
+    cookie = models.CharField(max_length=40, unique=True, default=generate_s(40))
 
     def __str__(self):
         return self.username
-
-
-class Cookie(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    cookie = models.CharField(max_length=40, unique=True)
-
-    def __str__(self):
-        return self.cookie

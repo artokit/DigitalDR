@@ -13,7 +13,19 @@
 }
 
 @media (max-width: 1200px) {
+    .error__image img {
+        width: 100%;
+    }
 
+    .error__image {
+        position: static !important;
+        display: flex;
+        align-items: center;
+    }
+
+    .error__message {
+        font-size: 24px !important;
+    }
 }
 
 @media (max-width: 992px) {
@@ -639,4 +651,37 @@ select {
 
 .username {
     margin-bottom: 30px;
+}
+
+.error {
+    position: absolute;
+    top:0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    background-color: #c8e7a1;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+.error__header {
+    font-size: 48px;
+    margin-bottom: 30px;
+    margin-top: 40px;
+}
+
+.error__message {
+    font-size: 36px;
+}
+
+.error__image {
+    position: relative;
+    top: -30px
+}
+
+.btn_wrap {
+    text-align: center;
+    margin-top: 20px;
 }

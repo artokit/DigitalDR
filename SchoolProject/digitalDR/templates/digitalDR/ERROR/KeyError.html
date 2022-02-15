@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block error %}{{ block.super }}{% endblock %}
+{% block error_message %}
+Чтобы продолжить, вы должны быть авторизованы.
+<br>
+<div class="btn_wrap">
+    <button onclick="(() => {window.location = '../'})()" class="btn">Авторизация</button>
+</div>
+{% endblock %}

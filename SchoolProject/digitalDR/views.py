@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from .forms import UserRegisterForm
 from django.views import View
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
@@ -88,30 +87,38 @@ class AddUser(View):
 
         user.save()
 
-        c = Cookie(user=user)
-        c.save()
-        request.session['cookie'] = c.cookie
+        request.session['cookie'] = user.cookie
         return JsonResponse({'success': True})
 
 
 class Login(View):
     def post(self, request):
         res = request.POST
-        if res['mode']:
+        if res['mode'] == 'teacher':
             code = res['code']
             try:
                 user = CustomUser.objects.get(teacher_code=code)
-                c = Cookie(user=user)
-                c.cookie = generate_s(40)
-                c.save()
-                request.session['cookie'] = c.cookie
+                user.cookie = generate_s(40)
+                user.save()
+                request.session['cookie'] = user.cookie
                 return JsonResponse({
-                    'success': True
+                    'success': True,
+                    'message': ''
                 })
             except CustomUser.DoesNotExist:
                 return JsonResponse({
-                    'success': False
+                    'success': False,
+                    'message': 'Данного кода не существует.'
                 })
+
+
+class Main(View):
+    def get(self, request):
+        try:
+            cookie = request.session['cookie']
+            return render(request, 'digitalDR/main.html')
+        except KeyError:
+            return render(request, 'digitalDR/ERROR/KeyError.html')
 
 
 class Password:
