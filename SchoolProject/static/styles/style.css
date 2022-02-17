@@ -77,6 +77,9 @@
     .navName {
         margin: 10px 0 0 0 !important;
     }
+    .navUser {
+        visibility: hidden;
+    }
 }
 
 * {
@@ -96,11 +99,11 @@ section {
     background-color: #e1f5cd;
 }
 
-header {
+header.header {
     background-color: #e1f5cd;
 }
 
-header h1 {
+header.header h1 {
     text-align: center;
     font-family: "Roboto Black", sans-serif;
     padding: 40px;
@@ -696,7 +699,7 @@ select {
     margin-top: 20px;
 }
 
-.header {
+.mainHeader {
     height: 75px;
     background-color: #7eb14a;
     display: flex;
@@ -745,7 +748,7 @@ select {
     max-width: 490px;
     position: absolute;
     top: 0;
-    left: -100vw;
+    left: -200vw;
     width: 50vw;
     height: 100vh;
     background-color: #608d33;
@@ -764,6 +767,7 @@ select {
 .navName {
     font-size: 24px;
     margin-left: 30px;
+    text-align: center;
 }
 
 .nav__close {
@@ -777,4 +781,32 @@ select {
 .nav__close img {
     width: 100%;
     height: 100%;
+}
+
+.nav__body {
+    padding: 10px;
+    font-size: 36px;
+    text-align: center;
+}
+
+.nav__body ul li {
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.list__li a {
+    transition: .6s;
+    text-decoration: none;
+    outline: none;
+    color: black;
+}
+
+.li_now a {
+    color: white;
+    border-bottom: 3px solid white;
+}
+
+.list__li a:hover {
+    transition: .6s;
+    color: white;
 }

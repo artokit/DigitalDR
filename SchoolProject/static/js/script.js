@@ -230,5 +230,5 @@ function viewNav() {
 function closeNav() {
     let nav = document.getElementsByClassName('nav')[0];
     nav.style.transition = '.3s';
-    nav.style.left = '-100vw';
+    nav.style.left = '-200vw';
 }
