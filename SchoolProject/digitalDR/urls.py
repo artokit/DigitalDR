@@ -8,5 +8,6 @@ urlpatterns = [
     path('add_user', AddUser.as_view(), name='add_user'),
     path('f', f, name='f'),
     path('login', Login.as_view(), name='login'),
-    path('main', Main.as_view(), name='main')
+    path('main', Main.as_view(), name='main'),
+    path('settings', Settings.as_view(), name='settings')
 ]

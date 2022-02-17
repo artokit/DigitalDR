@@ -19,7 +19,20 @@ class Index(View):
 
 class MenuView(View):
     def get(self, request):
-        return render(request, 'digitalDR/menu.html')
+        try:
+            cookie = request.session['cookie']
+            user = CustomUser.objects.get(cookie=cookie)
+            context = {
+                'user': user,
+            }
+
+            return render(request, 'digitalDR/menu.html', context=context)
+
+        except KeyError:
+            return render(request, 'digitalDR/ERROR/KeyError.html')
+
+        except CustomUser.DoesNotExist:
+            return render(request, 'digitalDR/ERROR/KeyError.html')
 
 
 class GetMenu(View):
@@ -118,10 +131,27 @@ class Main(View):
             cookie = request.session['cookie']
             user = CustomUser.objects.get(cookie=cookie)
             context = {
-                'user': user
+                'user': user,
             }
 
             return render(request, 'digitalDR/main.html', context=context)
+
+        except KeyError:
+            return render(request, 'digitalDR/ERROR/KeyError.html')
+
+        except CustomUser.DoesNotExist:
+            return render(request, 'digitalDR/ERROR/KeyError.html')
+
+
+class Settings(View):
+    def get(self, request):
+        try:
+            cookie = request.session['cookie']
+            user = CustomUser.objects.get(cookie=cookie)
+            context = {
+                'user': user,
+            }
+            return render(request, 'digitalDR/settings.html', context=context)
 
         except KeyError:
             return render(request, 'digitalDR/ERROR/KeyError.html')
@@ -143,3 +173,4 @@ class Password:
         hashed_password = CustomUser.objects.filter(username=self.username)[0].password
         password, salt = hashed_password.split(':')
         return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
+

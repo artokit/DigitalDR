@@ -97,7 +97,6 @@ function load(func, content) {
     let html = document.getElementsByTagName('html')[0];
     html.appendChild(elem_load);
     elem_load.style.top = window.pageYOffset + 'px';
-    document.body.style.overflowY = 'hidden';
     func();
 }
 

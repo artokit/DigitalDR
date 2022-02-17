@@ -91,6 +91,7 @@
 
 body, html {
     overflow-x: hidden;
+    height: 100%;
 }
 
 section {
@@ -700,11 +701,14 @@ select {
 }
 
 .mainHeader {
+    width: 100%;
     height: 75px;
     background-color: #7eb14a;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: static;
+    top: 0
 }
 
 .btnNav__stick {

@@ -14,8 +14,9 @@
     <hr>
     <div class="nav__body">
         <ul class="">
-            <li class="list__li li_now"><a href="#">Заказы</a></li>
-            <li class="list__li"><a href="#">Настройки</a></li>
+            <li class="list__li"><a href="{% url 'main' %}">Заказы</a></li>
+            <li class="list__li"><a href="{% url 'settings' %}">Настройки</a></li>
+            <li class="list__li"><a href="{% url 'menu' %}">Меню</a></li>
         </ul>
     </div>
 </div>
