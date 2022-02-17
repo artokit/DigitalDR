@@ -205,12 +205,30 @@ function ModalLogin() {
 function login() {
     let elem_active = document.getElementsByClassName('active')[0];
     let csrf = document.getElementsByName('csrfmiddlewaretoken')[0];
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+        let res = JSON.parse(xhr.response);
+        if (res['success']) {
+            window.location = domen + 'main';
+        }
+    };
     console.log(csrf.value);
     if (elem_active.innerText === 'Учитель') {
         let code__input = document.getElementsByClassName('code__input')[0];
-        const xhr = new XMLHttpRequest();
         xhr.open('POST', LOGIN_URL);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send(`csrfmiddlewaretoken=${csrf.value}&mode=teacher&code=${code__input.value}`);
     }
+}
+
+function viewNav() {
+    let nav = document.getElementsByClassName('nav')[0];
+    nav.style.transition = '.3s';
+    nav.style.left = '0'
+}
+
+function closeNav() {
+    let nav = document.getElementsByClassName('nav')[0];
+    nav.style.transition = '.3s';
+    nav.style.left = '-100vw';
 }

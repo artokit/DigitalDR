@@ -116,8 +116,17 @@ class Main(View):
     def get(self, request):
         try:
             cookie = request.session['cookie']
-            return render(request, 'digitalDR/main.html')
+            user = CustomUser.objects.get(cookie=cookie)
+            context = {
+                'user': user
+            }
+
+            return render(request, 'digitalDR/main.html', context=context)
+
         except KeyError:
+            return render(request, 'digitalDR/ERROR/KeyError.html')
+
+        except CustomUser.DoesNotExist:
             return render(request, 'digitalDR/ERROR/KeyError.html')
 
 

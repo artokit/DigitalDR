@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="ru-ru">
+<html>
 {% load static %}
 <head>
     <meta charset="UTF-8">
@@ -11,12 +11,14 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    {% block header %}
-        {% include "inc/_header.html" %}
-    {% endblock %}
-    {% block nav %}
-        {% include "inc/_nav.html" %}
-    {% endblock %}
-    {% block content %}{% endblock %}
+<div class="error">
+    <div class="error__image">
+        <img src="{% static 'images/broken.png' %}" alt="Сломанный компьютер">
+    </div>
+    <div class="error__text">
+        <h2 class="error__header">Упс!</h2>
+        <span class="error__message">{% block error_message %}{% endblock %}</span>
+    </div>
+</div>
 </body>
 </html>

@@ -1,0 +1,15 @@
+{% load static %}
+<div class="nav">
+    <div class="nav__close" onclick="closeNav()">
+        ←
+    </div>
+    <div class="nav__user user">
+        <div class="user__avatar navAvatar">
+
+        </div>
+        <div class="user__name navName">
+            {{ user.name.capitalize }} {{ user.last_name.capitalize }}
+        </div>
+    </div>
+    <hr>
+</div>
