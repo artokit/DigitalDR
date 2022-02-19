@@ -32,14 +32,36 @@ class CustomUser(models.Model):
     username = models.CharField(max_length=150, unique=True, blank=False, verbose_name="Логин")
     password = models.CharField(max_length=150, blank=False, verbose_name="Пароль")
     user_class = models.ForeignKey(Class, on_delete=models.CASCADE, default=1, blank=False, verbose_name='Класс')
-    is_teacher = models.BooleanField(default=False, verbose_name="Учитель")
+    cookie = models.CharField(max_length=40, unique=True, default=generate_s(40))
+    card_num = models.CharField(max_length=30, blank=True, verbose_name='Номер Карты')
+    default_days = {
+        'Пн': False,
+        'Вт': False,
+        'Ср': False,
+        'Чт': False,
+        'Пт': False,
+    }
+    dinner_days = models.JSONField(default=default_days)
+    lunch_days = models.JSONField(default=default_days)
+
+    def __str__(self):
+        return self.username
+
+
+class Teacher(CustomUser):
     teacher_code = models.CharField(
         max_length=16,
         default=generate_s(16),
         unique=True,
         verbose_name='Код'
     )
-    cookie = models.CharField(max_length=40, unique=True, default=generate_s(40))
 
     def __str__(self):
-        return self.username
+        return 'Учитель'
+
+
+class Student(CustomUser):
+    accept = models.BooleanField(default=False)
+
+    def __str__(self):
+        return 'Ученик'

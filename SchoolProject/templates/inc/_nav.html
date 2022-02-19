@@ -14,9 +14,13 @@
     <hr>
     <div class="nav__body">
         <ul class="">
-            <li class="list__li"><a href="{% url 'main' %}">Заказы</a></li>
+            <li class="list__li"><a href="#">Моя страница</a></li>
             <li class="list__li"><a href="{% url 'settings' %}">Настройки</a></li>
             <li class="list__li"><a href="{% url 'menu' %}">Меню</a></li>
+            {% if user.teacher_code %}
+                <li class="list__li"><a href="#">Заявки</a></li>
+                <li class="list__li"><a href="#">Заказы</a></li>
+            {% endif %}
         </ul>
     </div>
 </div>

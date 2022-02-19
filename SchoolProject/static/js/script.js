@@ -3,7 +3,9 @@ const domen = 'http://127.0.0.1:8000/';
 const GET_MENU_URL = domen + 'get_menu';
 const ADD_NEW_USER_URL = domen + 'add_user';
 const F_URL = domen + 'f';
+const SETTINGS_URL = domen + 'settings';
 const LOGIN_URL = domen + 'login';
+const MAIN_URL = domen + 'main';
 
 function f() {
     let road = document.getElementById('road');
@@ -152,7 +154,7 @@ function add_new_user() {
             anim_error(elem_error);
             return false;
         } else if (res.success) {
-            document.location.href = F_URL;
+            document.location.href = MAIN_URL;
         }
     };
 
@@ -230,4 +232,76 @@ function closeNav() {
     let nav = document.getElementsByClassName('nav')[0];
     nav.style.transition = '.3s';
     nav.style.left = '-200vw';
+}
+
+function clickFoodBtn(elem) {
+    if (!elem.value) {
+        elem.style.transition = '.6s';
+        elem.style.backgroundColor = '#76b863';
+        elem.value = 'active';
+    }
+    else {
+        elem.style.transition = '.6s';
+        elem.style.backgroundColor = 'inherit';
+        elem.value = '';
+    }
+}
+
+function saveSettings() {
+    let csrf = document.getElementsByName('csrfmiddlewaretoken')[0];
+    let name = document.getElementById('name');
+    let lastName = document.getElementById('lastname');
+    let email = document.getElementById('email');
+    let login = document.getElementById('login');
+    let password = document.getElementById('password');
+    let schoolId = document.getElementById('schoolId');
+    let CardId = document.getElementById('CardId');
+    let lunch = document.getElementsByClassName('btnBlock')[0];
+    let dinner = document.getElementsByClassName('btnBlock')[1];
+    let sendBody = {
+        name: name.value,
+        lastName: lastName.value,
+        email: email.value,
+        login: login.value,
+        password: password.value,
+        card: schoolId.value + '-' + CardId.value,
+        lunch: {
+            Пн: false,
+            Вт: false,
+            Ср: false,
+            Чт: false,
+            Пт: false
+        },
+
+        dinner: {
+            Пн: false,
+            Вт: false,
+            Ср: false,
+            Чт: false,
+            Пт: false
+        }
+    };
+
+    for (let elem of lunch.getElementsByClassName('btnBlock__foodBtn')) {
+        if (elem.value === 'active') {
+            sendBody.lunch[elem.innerText] = true;
+        }
+    }
+
+    for (let elem of dinner.getElementsByClassName('btnBlock__foodBtn')) {
+        if (elem.value === 'active') {
+            sendBody.dinner[elem.innerText] = true;
+        }
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', SETTINGS_URL)
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onload = () => {
+
+    }
+
+    let data = JSON.stringify(sendBody)
+    xhr.send(`data=${data}&csrfmiddlewaretoken=${csrf.value}`);
 }

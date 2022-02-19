@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect
 from django.core import serializers
 from .models import *
 import uuid
 import hashlib
+import json
 
 
 def f(request):
@@ -13,26 +15,26 @@ def f(request):
 
 class Index(View):
     def get(self, request):
-        select = Class.objects.all()
-        return render(request, 'digitalDR/about.html', {'select': select})
+        try:
+            CustomUser.objects.get(cookie=request.session['cookie'])
+            return redirect('main')
+        except CustomUser.DoesNotExist:
+            select = Class.objects.all()
+            return render(request, 'digitalDR/about.html', {'select': select})
 
 
 class MenuView(View):
     def get(self, request):
-        try:
-            cookie = request.session['cookie']
-            user = CustomUser.objects.get(cookie=cookie)
+        user = check_user(request)
+        if str(user) in ('Учитель', 'Ученик'):
             context = {
-                'user': user,
+                'user': user
             }
 
             return render(request, 'digitalDR/menu.html', context=context)
 
-        except KeyError:
-            return render(request, 'digitalDR/ERROR/KeyError.html')
-
-        except CustomUser.DoesNotExist:
-            return render(request, 'digitalDR/ERROR/KeyError.html')
+        else:
+            return user
 
 
 class GetMenu(View):
@@ -61,7 +63,7 @@ class AddUser(View):
                     'elem_error_id': d[i][1]
                 })
 
-        if CustomUser.objects.filter(username=res['username'][0]):
+        if Student.objects.filter(username=res['username'][0]):
             return JsonResponse({
                 'success': False,
                 'message': 'Аккаунт с данным логином уже создан.',
@@ -75,7 +77,7 @@ class AddUser(View):
                 'elem_error_id': d['email'][1]
             })
 
-        if CustomUser.objects.filter(email=res['email'][0]):
+        if Student.objects.filter(email=res['email'][0]):
             return JsonResponse({
                 'success': False,
                 'message': 'Аккаунт с данным Email уже существует.',
@@ -89,7 +91,7 @@ class AddUser(View):
                 'elem_error_id': d['user_class'][1]
             })
 
-        user = CustomUser(**{
+        user = Student(**{
             'name': res['first_name'][0],
             'last_name': res['last_name'][0],
             'email': res['email'][0],
@@ -97,6 +99,8 @@ class AddUser(View):
             'password': Password(res['password'][0]).hash_password(),
             'user_class': Class.objects.get(name_class=res['user_class'][0])
         })
+
+        user.cookie = (lambda: generate_s(40))()
 
         user.save()
 
@@ -110,7 +114,7 @@ class Login(View):
         if res['mode'] == 'teacher':
             code = res['code']
             try:
-                user = CustomUser.objects.get(teacher_code=code)
+                user = Teacher.objects.get(teacher_code=code)
                 user.cookie = generate_s(40)
                 user.save()
                 request.session['cookie'] = user.cookie
@@ -118,7 +122,7 @@ class Login(View):
                     'success': True,
                     'message': ''
                 })
-            except CustomUser.DoesNotExist:
+            except Teacher.DoesNotExist:
                 return JsonResponse({
                     'success': False,
                     'message': 'Данного кода не существует.'
@@ -127,37 +131,84 @@ class Login(View):
 
 class Main(View):
     def get(self, request):
-        try:
-            cookie = request.session['cookie']
-            user = CustomUser.objects.get(cookie=cookie)
+        user = check_user(request)
+        if str(user) in ('Учитель', 'Ученик'):
             context = {
-                'user': user,
+                'user': user
             }
 
             return render(request, 'digitalDR/main.html', context=context)
 
-        except KeyError:
-            return render(request, 'digitalDR/ERROR/KeyError.html')
+        else:
+            return user
 
-        except CustomUser.DoesNotExist:
-            return render(request, 'digitalDR/ERROR/KeyError.html')
+
+class RequestsStudents(View):
+    def get(self, request):
+        return render(request, '')
 
 
 class Settings(View):
     def get(self, request):
-        try:
-            cookie = request.session['cookie']
-            user = CustomUser.objects.get(cookie=cookie)
+        user = check_user(request)
+        if str(user) in ('Учитель', 'Ученик'):
             context = {
                 'user': user,
+                'schoolId': user.card_num.split('-')[0],
+                'cardId': user.card_num.split('-')[1],
+                'dinner': dict(user.dinner_days),
+                'lunch': dict(user.lunch_days)
             }
+
             return render(request, 'digitalDR/settings.html', context=context)
 
-        except KeyError:
+        else:
+            return user
+
+    def post(self, request):
+        res = request.POST
+        data = json.loads(res['data'])
+        user = check_user(request)
+
+        user.name = data['name'] if data['name'] else user.name
+        user.last_name = data['lastName'] if data['lastName'] else user.last_name
+        user.login = data['login'] if data['login'] else user.login
+        user.email = data['email'] if data['email'] else user.email
+        user.password = Password(data['password']).hash_password() if data['password'] else user.password
+        user.card_num = data['card'] if data['card'] != '-' else user.card_num
+        user.dinner_days = data['dinner']
+        user.lunch_days = data['lunch']
+
+        user.save()
+        # user.update(
+        #     name=data['name'],
+        #     last_name=data['lastName'],
+        #     email=data['email'],
+        #     password=Password(data['password']).hash_password(),
+        #     card_num=data['card'],
+        #     dinner_days=data['dinner'],
+        #     lunch_days=data['lunch']
+        # )
+
+        return JsonResponse({'succes': True})
+
+
+def check_user(request):
+    try:
+        cookie = request.session['cookie']
+        if Teacher.objects.filter(cookie=cookie):
+            user = Teacher.objects.get(cookie=cookie)
+
+        elif Student.objects.filter(cookie=cookie):
+            user = Student.objects.get(cookie=cookie)
+
+        else:
             return render(request, 'digitalDR/ERROR/KeyError.html')
 
-        except CustomUser.DoesNotExist:
-            return render(request, 'digitalDR/ERROR/KeyError.html')
+        return user
+
+    except KeyError:
+        return render(request, 'digitalDR/ERROR/KeyError.html')
 
 
 class Password:

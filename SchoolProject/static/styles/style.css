@@ -814,3 +814,106 @@ select {
     transition: .6s;
     color: white;
 }
+
+.rowSetting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.settings__body {
+    margin: 50px auto 0;
+    max-width: 1000px;
+}
+
+.rowSetting__input {
+    flex-basis: 80%;
+    border-radius: 0 !important;
+    background-color: #b5e1e1 !important;
+    flex-shrink: 0;
+}
+
+.rowSetting__label {
+    flex-basis: 20%;
+}
+
+.rowSubmit {
+    text-align: center;
+}
+
+.btnSave {
+    padding: 10px;
+}
+
+.cardNum {
+    display: flex;
+    align-items: center;
+    flex-basis: 100%;
+}
+
+#schoolId {
+    flex-basis: 3%;
+    width: 75px;
+}
+
+#CardId {
+    flex-basis: 75%;
+    flex-grow: 1;
+}
+
+#schoolId + span {
+    font-size: 24px;
+    flex-basis: 5%;
+    text-align: center;
+}
+
+.rowFood__dinner, .rowFood__lunch {
+    display: flex;
+    flex-direction: column;
+}
+
+.rowsFoodWrap {
+    display: flex;
+    justify-content: space-around;
+}
+
+.foodBlock__header {
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #9d56c1;
+    border-bottom: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.btnBlock__foodBtn {
+    padding: 3px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.btnBlock {
+    padding: 5px;
+    border: 1px solid #9d56c1;
+}
+
+.rowSettingCol {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+}
+
+label[for='CardId'] {
+    text-align: center;
+}
+
+.rowSubmit {
+    margin-top: 10px;
+}
+
+.btnBlock__foodBtn[value='active'] {
+    transition: .6s;
+    background-color: #76b863;
+}

@@ -6,4 +6,5 @@ from .models import CustomUser
 admin.site.register(CustomUser)
 admin.site.register(Menu)
 admin.site.register(Class)
-# admin.site.register(Cookie)
+admin.site.register(Teacher)
+admin.site.register(Student)
