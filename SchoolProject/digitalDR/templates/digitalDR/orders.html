@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ block.super }} :: Заказы
+{% endblock %}
+
+{% block header %}
+    {{ block.super }}
+{% endblock %}
+
+{% block nav %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <div class="orders">
+        {% for order in orders %}
+            <div class="orders__student student">
+                <div class="student__photo">
+
+                </div>
+                <div class="student__name">
+                    {{ order.name.capitalize }} {{ order.last_name.capitalize }}
+                </div>
+                <div class="studentFood">
+                    <div class="student__lunch">
+                        <div class="lunch__header">
+                            Завтрак
+                        </div>
+                        <div class="lunchDays">
+                            {% for day, value in order.lunch_days.items %}
+                            {% if value %}
+                            <div class="lunchDay_active">{{ day }}</div>
+                            {% else %}
+                            <div class="lunchDay">{{ day }}</div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="student__dinner">
+                        <div class="dinner__header">
+                            Обед
+                        </div>
+                        <div class="dinnerDays">
+                            {% for day, value in order.dinner_days.items %}
+                            {% if value %}
+                            <div class="dinnerDay_active">{{ day }}</div>
+                            {% else %}
+                            <div class="dinnerDay">{{ day }}</div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+        {% endfor %}
+    </div>
+{% endblock %}

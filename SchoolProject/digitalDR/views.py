@@ -293,6 +293,24 @@ class Balance(View):
             return user
 
 
+class Orders(View):
+    def get(self, request):
+        user = check_user(request)
+        if str(user) == 'Учитель':
+            context = {
+                'user': user,
+                'orders': Student.objects.filter(accept=True)
+            }
+
+            return render(request, 'digitalDR/orders.html', context=context)
+
+        elif str(user) == 'Ученик':
+            return HttpResponse('Слышь, тебе сюда нельзя')
+
+        else:
+            return user
+
+
 class Password:
     def __init__(self, password):
         self.salt = uuid.uuid4().hex
@@ -305,3 +323,4 @@ class Password:
         hashed_password = self.password
         password, salt = hashed_password.split(':')
         return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
+

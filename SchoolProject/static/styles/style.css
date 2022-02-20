@@ -18,6 +18,19 @@
     }
 }
 
+@media (max-width: 500px) {
+    .student__photo {
+        visibility: hidden;
+        display: none;
+    }
+    .student {
+        flex-direction: column;
+    }
+    .student__name {
+        margin-bottom: 10px;
+    }
+}
+
 @media (max-width: 1200px) {
     .error__image img {
         width: 100%;
@@ -85,6 +98,12 @@
     }
     .navUser {
         visibility: hidden;
+    }
+    .studentFood {
+        flex-direction: column;
+    }
+    .lunchDays {
+        margin-bottom: 15px;
     }
 }
 
@@ -1002,12 +1021,39 @@ label[for='CardId'] {
     background-color: #ff5757;
 }
 
-.requests {
+.requests, .orders {
     padding: 15px;
-    max-width: 1000px;
+    max-width: 1600px;
     margin: 0 auto;
 }
 
 .requests__nullRequests {
     text-align: center;
+}
+
+.lunch__header, .dinner__header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.lunchDays, .dinnerDays {
+    display: flex;
+    justify-content: space-around;
+}
+
+.lunchDay, .lunchDay_active, .dinnerDay, .dinnerDay_active {
+    margin: 0 5px;
+    padding: 3px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.lunchDay_active, .dinnerDay_active {
+    background-color: #76b863;
+}
+
+.studentFood {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
 }

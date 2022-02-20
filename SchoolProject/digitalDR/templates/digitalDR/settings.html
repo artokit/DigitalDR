@@ -44,11 +44,11 @@
                     </div>
                     <div class="btnBlock">
                         {% for day, value in lunch.items %}
-                        {% if value %}
-                        <button class="btnBlock__foodBtn" onclick="clickFoodBtn(this)" value="active">{{ day }}</button>
-                        {% else %}
-                        <button class="btnBlock__foodBtn" onclick="clickFoodBtn(this)">{{ day }}</button>
-                        {% endif %}
+                            {% if value %}
+                                <button class="btnBlock__foodBtn" onclick="clickFoodBtn(this)" value="active">{{ day }}</button>
+                            {% else %}
+                                <button class="btnBlock__foodBtn" onclick="clickFoodBtn(this)">{{ day }}</button>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
