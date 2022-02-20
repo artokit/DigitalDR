@@ -4,16 +4,18 @@
         <div class="btnNav__stick"></div>
         <div class="btnNav__stick"></div>
     </div>
-    <div class="user navUser">
-        <div class="user__name">
-            {{ user.name.capitalize }} {{ user.last_name.upper.0 }}.
-        </div>
-        <div class="user__avatar">
-            {% if user.is_teacher %}
-            <img src="" alt="" id="ateacher">
-            {% else %}
-            <img src="" alt="" id="nt">
-            {% endif %}
+    <div class="navUser">
+        <div class="navUser__data user">
+            <div class="user__name">
+                {{ user.name.capitalize }} {{ user.last_name.upper.0 }}.
+            </div>
+            <div class="user__avatar">
+                {% if user.is_teacher %}
+                <img src="" alt="" id="ateacher">
+                {% else %}
+                <img src="" alt="" id="nt">
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

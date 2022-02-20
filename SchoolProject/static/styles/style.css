@@ -12,6 +12,12 @@
     font-style: normal;
 }
 
+@media (max-height: 480px) {
+    .login {
+        height: 100% !important;
+    }
+}
+
 @media (max-width: 1200px) {
     .error__image img {
         width: 100%;
@@ -577,7 +583,7 @@ select {
     margin: auto;
     background-color: white;
     width: 80vw;
-    height: 50vh;
+    height: 480px;
     max-width: 896px;
 }
 
@@ -645,7 +651,7 @@ select {
 
 .btn_login {
     text-align: center;
-    margin: 100px 0;
+    margin: 3% 0 0 0;
 }
 
 .login__tform, .login__sform {
@@ -723,7 +729,7 @@ select {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-basis: 160px;
+    width: 150px;
 }
 
 .user__avatar {
@@ -916,4 +922,92 @@ label[for='CardId'] {
 .btnBlock__foodBtn[value='active'] {
     transition: .6s;
     background-color: #76b863;
+}
+
+.settings__message_active {
+    transition: .3s;
+    border: 1px solid black;
+    background-color: rgba(169, 255, 34, 0.44);
+    padding: 15px;
+    font-size: 24px;
+    margin: 30px auto;
+    width: 700px;
+    border-radius: 15px;
+}
+
+.nav__user {
+    width: 100%;
+}
+
+.loginMessage {
+    width: 100%;
+    padding: 15px;
+    font-size: 24px;
+    border-radius: 20px;
+    color: white;
+    margin: 10px 0;
+}
+
+.student {
+    margin: 20px 0;
+    width: 100%;
+    border: 3px solid black;
+    display: flex;
+    padding: 15px;
+    align-items: center;
+}
+
+.student__photo {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    background-color: black;
+    margin-right: 10px;
+}
+
+.student__buttons {
+    flex-basis: 40%;
+}
+
+.student__buttons .btns {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+}
+
+.student__name {
+    flex-basis: 50%;
+}
+
+.buttonStudent {
+    padding: 10px;
+    margin-left: 10px;
+    border: 2px outset black;
+    border-radius: 5px;
+}
+
+.buttonStudentAccept:hover {
+    background-color: #68952f;
+}
+
+.buttonStudentAccept {
+    background-color: #7eb14a;
+}
+
+.buttonStudentCancel:hover {
+    background-color: #bf4242;
+}
+
+.buttonStudentCancel {
+    background-color: #ff5757;
+}
+
+.requests {
+    padding: 15px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.requests__nullRequests {
+    text-align: center;
 }

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% autoescape on %}
+        <div class="balance">
+            {{ balance|safe }}
+        </div>
+    {% endautoescape %}
+{% endblock %}

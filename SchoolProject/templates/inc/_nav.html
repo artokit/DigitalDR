@@ -17,8 +17,9 @@
             <li class="list__li"><a href="#">Моя страница</a></li>
             <li class="list__li"><a href="{% url 'settings' %}">Настройки</a></li>
             <li class="list__li"><a href="{% url 'menu' %}">Меню</a></li>
+            <li class="list__li"><a href="{% url 'balance' %}">Баланс</a></li>
             {% if user.teacher_code %}
-                <li class="list__li"><a href="#">Заявки</a></li>
+                <li class="list__li"><a href="{% url 'RequestsStudents' %}">Заявки</a></li>
                 <li class="list__li"><a href="#">Заказы</a></li>
             {% endif %}
         </ul>

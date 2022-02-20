@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block header %}{{ block.super }}{% endblock %}
+{% block nav %}{{ block.super }}{% endblock %}
+{% block content %}
+    {% csrf_token %}
+    <div class="requests">
+        {% if requests %}
+            {% for student in requests %}
+                <div class="requests__student student" id="student{{ student.id }}">
+                    <div class="student__photo">
+
+                    </div>
+                    <div class="student__name">
+                        {{ student.name.capitalize }} {{ student.last_name.capitalize }}
+                    </div>
+                    <div class="student__buttons">
+                        <div class="btns">
+                            <button class="buttonStudent buttonStudentAccept" onclick="studentAccept(this, {{ student.id }})">&#10004;</button>
+                            <button class="buttonStudent buttonStudentCancel" onclick="studentAccept(this, {{ student.id }})">&#10006;</button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="requests__nullRequests">
+                <h2>Новых заявок нет.</h2>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

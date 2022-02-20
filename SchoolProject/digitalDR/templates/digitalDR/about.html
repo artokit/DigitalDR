@@ -23,17 +23,20 @@
                 Учитель
             </div>
             <div id="student" class="active" onclick="replaceBlock(this)">
-                Ученик
+                Для всех
             </div>
         </div>
         <div class="login__sform login__form">
             <div class="username">
-                <label for=".username__input">Логин:</label>
-                <input type="text" class="username__input">
+                <label for="username__input">Логин:</label>
+                <input type="text" class="username__input" id="username__input">
             </div>
             <div class="password">
-                <label for=".password__input">Пароль:</label>
-                <input type="password" class="password__input">
+                <label for="password__input">Пароль:</label>
+                <input type="password" class="password__input" id="password__input">
+            </div>
+            <div class="loginMessage">
+
             </div>
             <div class="btn_login">
                 <button type="submit" class="btn_student" onclick="login()">Войти</button>
@@ -41,8 +44,11 @@
         </div>
         <div class="login__tform login__form">
             <div class="code">
-                <label for=".code__input">Код учителя:</label>
-                <input type="text" class="code__input">
+                <label for="code__input">Код учителя:</label>
+                <input type="text" class="code__input" id="code__input">
+            </div>
+            <div class="loginMessage">
+
             </div>
             <div class="btn_login">
                 <button type="submit" class="btn_teacher" onclick="login()">Войти</button>

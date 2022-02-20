@@ -2,10 +2,10 @@
 const domen = 'http://127.0.0.1:8000/';
 const GET_MENU_URL = domen + 'get_menu';
 const ADD_NEW_USER_URL = domen + 'add_user';
-const F_URL = domen + 'f';
 const SETTINGS_URL = domen + 'settings';
 const LOGIN_URL = domen + 'login';
 const MAIN_URL = domen + 'main';
+const REQUESTS_STUDENTS_URL = domen + 'requestsStudents';
 
 function f() {
     let road = document.getElementById('road');
@@ -207,18 +207,34 @@ function login() {
     let elem_active = document.getElementsByClassName('active')[0];
     let csrf = document.getElementsByName('csrfmiddlewaretoken')[0];
     const xhr = new XMLHttpRequest();
+
     xhr.onload = () => {
         let res = JSON.parse(xhr.response);
         if (res['success']) {
             window.location = domen + 'main';
         }
+        else {
+            let active = document.getElementsByClassName('active')[0].innerText;
+            let loginMessage = (active === 'Учитель')?document.getElementsByClassName('loginMessage')[1] : document.getElementsByClassName('loginMessage')[0];
+            loginMessage.innerText = res['message'];
+            loginMessage.style.transition = '.6s';
+            loginMessage.style.backgroundColor = '#ff5454';
+        }
     };
-    console.log(csrf.value);
+
     if (elem_active.innerText === 'Учитель') {
         let code__input = document.getElementsByClassName('code__input')[0];
         xhr.open('POST', LOGIN_URL);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send(`csrfmiddlewaretoken=${csrf.value}&mode=teacher&code=${code__input.value}`);
+    }
+
+    else {
+        let login = document.getElementById('username__input').value;
+        let password = document.getElementById('password__input').value;
+        xhr.open('POST', LOGIN_URL);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(`csrfmiddlewaretoken=${csrf.value}&mode=student&password=${password}&login=${login}`);
     }
 }
 
@@ -256,8 +272,13 @@ function saveSettings() {
     let password = document.getElementById('password');
     let schoolId = document.getElementById('schoolId');
     let CardId = document.getElementById('CardId');
+
     let lunch = document.getElementsByClassName('btnBlock')[0];
     let dinner = document.getElementsByClassName('btnBlock')[1];
+
+    let btn = document.getElementsByClassName('btnSave')[0];
+    btn.disabled = true;
+
     let sendBody = {
         name: name.value,
         lastName: lastName.value,
@@ -299,9 +320,32 @@ function saveSettings() {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
     xhr.onload = () => {
-
+        if (JSON.parse(xhr.response).success) {
+            let msg = document.getElementsByClassName('settings__message')[0];
+            msg.innerText = 'Настройки успешно сохранены.';
+            msg.className = 'settings__message_active';
+            setTimeout(() => {window.location.reload()}, 2000);
+        }
     }
 
     let data = JSON.stringify(sendBody)
     xhr.send(`data=${data}&csrfmiddlewaretoken=${csrf.value}`);
+}
+
+function studentAccept(elem, student_id) {
+    let accept = (elem.className === 'buttonStudent buttonStudentAccept') ? 'accept':'cancel';
+    let csrf = document.getElementsByName('csrfmiddlewaretoken')[0];
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = () => {
+        let res = JSON.parse(xhr.response);
+        if (res['success']) {
+            let student_elem = document.getElementById('student' + String(student_id));
+            student_elem.remove();
+        }
+    }
+
+    xhr.open('POST', REQUESTS_STUDENTS_URL);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(`csrfmiddlewaretoken=${csrf.value}&id=${student_id}&type=${accept}`);
 }

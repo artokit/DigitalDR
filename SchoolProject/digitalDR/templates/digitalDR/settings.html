@@ -3,6 +3,9 @@
 {% block nav %}{{ block.super }}{% endblock %}
 {% block content %}
 <div class="settings">
+    <div class="settings__message">
+
+    </div>
     <div class="settings__body">
         {% csrf_token %}
         <div class="rowSetting">
