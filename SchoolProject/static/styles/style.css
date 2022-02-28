@@ -18,6 +18,13 @@
     }
 }
 
+@media (max-height: 650px) {
+    .close {
+        top: 5px !important;
+        right: 5px !important;
+    }
+}
+
 @media (max-width: 500px) {
     .student__photo {
         visibility: hidden;
@@ -104,6 +111,16 @@
     }
     .lunchDays {
         margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 650px) {
+    .tr__Dinner {
+        display: none;
+    }
+    .tr__Lunch {
+        display: none;
+        visibility: none;
     }
 }
 
@@ -602,8 +619,9 @@ select {
     margin: auto;
     background-color: white;
     width: 80vw;
-    height: 480px;
+    height: 30vh;
     max-width: 896px;
+    min-height: 360px;
 }
 
 .wrap_login {
@@ -781,6 +799,8 @@ select {
     width: 50vw;
     height: 100vh;
     background-color: #608d33;
+    display: flex;
+    flex-direction: column;
 }
 
 .nav__user {
@@ -816,6 +836,7 @@ select {
     padding: 10px;
     font-size: 36px;
     text-align: center;
+    overflow-y: auto;
 }
 
 .nav__body ul li {
@@ -845,6 +866,11 @@ select {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
+    min-width: 391px;
+}
+
+.nav__user + hr {
+    width: 100%;
 }
 
 .settings__body {
@@ -861,6 +887,7 @@ select {
 
 .rowSetting__label {
     flex-basis: 20%;
+    flex-shrink: 0;
 }
 
 .rowSubmit {
@@ -1056,4 +1083,24 @@ label[for='CardId'] {
     display: flex;
     justify-content: space-around;
     width: 100%;
+}
+
+.UserTable {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.UserTable tr {
+    border: 1px solid black;
+}
+
+.UserTable td {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.settings__body a {
+    display: block;
+    margin-bottom: 10px;
 }

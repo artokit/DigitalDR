@@ -11,5 +11,5 @@ urlpatterns = [
     path('settings', Settings.as_view(), name='settings'),
     path('balance', Balance.as_view(), name='balance'),
     path('requestsStudents', RequestsStudents.as_view(), name='RequestsStudents'),
-    path('orders', Orders.as_view(), name='orders')
+    path('orders/', Orders.as_view(), name='orders')
 ]

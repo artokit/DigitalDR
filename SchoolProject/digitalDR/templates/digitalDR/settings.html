@@ -7,72 +7,9 @@
 
     </div>
     <div class="settings__body">
-        {% csrf_token %}
-        <div class="rowSetting">
-            <label for="name" class="rowSetting__label">Имя:</label>
-            <input type="text" id="name" class="rowSetting__input" value="{{ user.name }}">
-        </div>
-        <div class="rowSetting">
-            <label for="lastname" class="rowSetting__label">Фамилия:</label>
-            <input type="text" id="lastname" class="rowSetting__input" value="{{ user.last_name }}">
-        </div>
-        <div class="rowSetting">
-            <label for="email" class="rowSetting__label">Email:</label>
-            <input type="text" id="email" class="rowSetting__input" value="{{ user.email }}">
-        </div>
-        <div class="rowSetting">
-            <label for="login" class="rowSetting__label">Логин:</label>
-            <input type="text" id="login" class="rowSetting__input" value="{{ user.username }}">
-        </div>
-        <div class="rowSetting">
-            <label for="password" class="rowSetting__label">Пароль:</label>
-            <input type="text" id="password" class="rowSetting__input">
-        </div>
-        <div class="rowSettingCol rowSetting">
-            <label for="CardId" class="rowSetting__label">Номер карты</label>
-            <div class="cardNum">
-                <input type="text" id="schoolId" class="rowSetting__input" value="{{ schoolId }}">
-                <span>-</span>
-                <input type="text" id="CardId" class="rowSetting__input" value="{{ cardId }}">
-            </div>
-        </div>
-        <div class="rowsFoodWrap">
-            <div class="rowFood">
-                <div class="rowFood__lunch">
-                    <div class="foodBlock__header">
-                        Завтраки
-                    </div>
-                    <div class="btnBlock">
-                        {% for day, value in lunch.items %}
-                            {% if value %}
-                                <button class="btnBlock__foodBtn" onclick="clickFoodBtn(this)" value="active">{{ day }}</button>
-                            {% else %}
-                                <button class="btnBlock__foodBtn" onclick="clickFoodBtn(this)">{{ day }}</button>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <div class="rowFood">
-                <div class="rowFood__dinner">
-                    <div class="foodBlock__header">
-                        Обеды
-                    </div>
-                    <div class="btnBlock">
-                        {% for day, value in dinner.items %}
-                            {% if value %}
-                                <button class="btnBlock__foodBtn" onclick="clickFoodBtn(this)" value="active">{{ day }}</button>
-                            {% else %}
-                            <button class="btnBlock__foodBtn" onclick="clickFoodBtn(this)">{{ day }}</button>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="rowSubmit">
-            <button type="submit" class="btnSave" onclick="saveSettings()">Сохранить</button>
-        </div>
+        <a href="#">Изменить пароль</a>
+        <a href="#">Изменить личные данные</a>
+        <a href="#">Изменить Завтраки и Обеды</a>
     </div>
 </div>
 {% endblock %}

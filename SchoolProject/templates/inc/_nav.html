@@ -8,7 +8,7 @@
 
         </div>
         <div class="user__name navName">
-            {{ user.name.capitalize }} {{ user.last_name.capitalize }}
+            {{ user.first_name.capitalize }} {{ user.last_name.capitalize }}
         </div>
     </div>
     <hr>
@@ -18,7 +18,7 @@
             <li class="list__li"><a href="{% url 'settings' %}">Настройки</a></li>
             <li class="list__li"><a href="{% url 'menu' %}">Меню</a></li>
             <li class="list__li"><a href="{% url 'balance' %}">Баланс</a></li>
-            {% if user.teacher_code %}
+            {% if is_teacher %}
                 <li class="list__li"><a href="{% url 'RequestsStudents' %}">Заявки</a></li>
                 <li class="list__li"><a href="{% url 'orders' %}">Заказы</a></li>
             {% endif %}

@@ -1,5 +1,6 @@
 from django.db import models
 import random
+from django.contrib.auth.models import User
 
 
 def generate_s(length):
@@ -20,6 +21,7 @@ class Menu(models.Model):
 
 class Class(models.Model):
     name_class = models.CharField(max_length=10)
+    user = models.ManyToManyField(User)
 
     def __str__(self):
         return self.name_class
@@ -46,6 +48,19 @@ class CustomUser(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class UserMenu(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    default_days = {
+        'Пн': False,
+        'Вт': False,
+        'Ср': False,
+        'Чт': False,
+        'Пт': False,
+    }
+    dinner_days = models.JSONField(default=default_days)
+    lunch_days = models.JSONField(default=default_days)
 
 
 class Teacher(CustomUser):

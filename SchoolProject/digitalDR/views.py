@@ -1,5 +1,10 @@
 from django.shortcuts import render
 from django.views import View
+from django.contrib.auth.views import LoginView
+from django.views.generic import ListView, FormView, TemplateView
+from .utils import DataMixin
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
+from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.core import serializers
@@ -8,24 +13,8 @@ import uuid
 import hashlib
 import json
 import requests
-
-
-def check_user(request):
-    try:
-        cookie = request.session['cookie']
-        if Teacher.objects.filter(cookie=cookie):
-            user = Teacher.objects.get(cookie=cookie)
-
-        elif Student.objects.filter(cookie=cookie):
-            user = Student.objects.get(cookie=cookie)
-
-        else:
-            return render(request, 'digitalDR/ERROR/KeyError.html')
-
-        return user
-
-    except KeyError:
-        return render(request, 'digitalDR/ERROR/KeyError.html')
+from .forms import UserChange
+import datetime
 
 
 def check_balance(card):
@@ -41,32 +30,24 @@ def check_balance(card):
     return r.json()['text']
 
 
-class Index(View):
-    def get(self, request):
-        user = check_user(request)
-        if str(user) in ('Учитель', 'Ученик'):
-            context = {
-                'user': user
-            }
-
-            return redirect('main')
-
-        else:
-            return render(request, 'digitalDR/about.html', context={'select': Class.objects.all()})
+class Main(TemplateView):
+    pass
 
 
-class MenuView(View):
-    def get(self, request):
-        user = check_user(request)
-        if str(user) in ('Учитель', 'Ученик'):
-            context = {
-                'user': user
-            }
+class Index(TemplateView):
+    template_name = 'digitalDR/about.html'
 
-            return render(request, 'digitalDR/menu.html', context=context)
 
-        else:
-            return user
+class MenuView(DataMixin, ListView):
+    template_name = 'digitalDR/menu.html'
+    model = Menu
+
+    def get_queryset(self):
+        return Menu.objects.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        return {**context, **self.get_user_context(user=self.request.user)}
 
 
 class GetMenu(View):
@@ -140,175 +121,62 @@ class AddUser(View):
         return JsonResponse({'success': True})
 
 
-class Login(View):
-    def post(self, request):
-        res = request.POST
-        if res['mode'] == 'teacher':
-            code = res['code']
-            try:
-                user = Teacher.objects.get(teacher_code=code)
-                user.cookie = generate_s(40)
-                user.save()
-                request.session['cookie'] = user.cookie
-                return JsonResponse({
-                    'success': True,
-                    'message': ''
-                })
+class RequestsStudents(DataMixin, ListView):
+    template_name = 'digitalDR/requestsStudents.html'
+    model = User
 
-            except Teacher.DoesNotExist:
-                return JsonResponse({
-                    'success': False,
-                    'message': 'Данного кода не существует.'
-                })
-
-        else:
-            login = res['login']
-            password = res['password']
-            try:
-                user = CustomUser.objects.get(username=login)
-                if Password(user.password).check_password(password):
-                    user.cookie = generate_s(40)
-                    user.save()
-                    request.session['cookie'] = user.cookie
-                    return JsonResponse({'success': True})
-
-                else:
-                    return JsonResponse({
-                        'success': False,
-                        'message': 'Неправильный Логин или Пароль.'
-                    })
-            except CustomUser.DoesNotExist:
-                return JsonResponse({
-                    'success': False,
-                    'message': 'Неправильный Логин или Пароль.'
-                })
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        return {**context, **self.get_user_context(user=self.request.user)}
 
 
-class Main(View):
-    def get(self, request):
-        user = check_user(request)
-        if str(user) in ('Учитель', 'Ученик'):
-            context = {
-                'user': user
-            }
+class Settings(DataMixin, FormView):
+    form_class = UserChange
+    template_name = 'digitalDR/settings.html'
 
-            return render(request, 'digitalDR/main.html', context=context)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        return {**context, **self.get_user_context(user=self.request.user)}
 
-        else:
-            return user
-
-
-class RequestsStudents(View):
-    def get(self, request):
-        user = check_user(request)
-        if str(user) in ('Учитель', 'Ученик'):
-            context = {
-                'user': user,
-                'requests': Student.objects.filter(accept=False, user_class=user.user_class)
-            }
-
-            return render(request, 'digitalDR/requestsStudents.html', context=context)
-
-        else:
-            return user
-
-    def post(self, request):
-        res = request.POST
-
-        user_id = int(res['id'])
-        act = res['type']
-
-        if act == 'accept':
-            user = Student.objects.get(id=user_id)
-            user.accept = True
-            user.save()
-            return JsonResponse({
-                'success': True
-            })
-        else:
-            user = Student.objects.get(id=user_id)
-            user.user_class = None
-            user.save()
-            return JsonResponse({
-                'success': True
-            })
-
-
-class Settings(View):
-    def get(self, request):
-        user = check_user(request)
-        if str(user) in ('Учитель', 'Ученик'):
-            context = {
-                'user': user,
-                'dinner': user.dinner_days,
-                'lunch': user.lunch_days
-            }
-            if user.card_num != '':
-                context['schoolId'] = user.card_num.split('-')[0]
-                context['cardId'] = user.card_num.split('-')[1]
-
-            return render(request, 'digitalDR/settings.html', context=context)
-
-        else:
-            return user
-
-    def post(self, request):
-        res = request.POST
-        data = json.loads(res['data'])
-        user = check_user(request)
-
-        user.name = data['name'] if data['name'] else user.name
-        user.last_name = data['lastName'] if data['lastName'] else user.last_name
-        user.login = data['login'] if data['login'] else user.login
-        user.email = data['email'] if data['email'] else user.email
-        user.password = Password(data['password']).hash_password() if data['password'] else user.password
-        user.card_num = data['card'] if data['card'] != '-' else user.card_num
-        user.dinner_days = data['dinner']
-        user.lunch_days = data['lunch']
-
-        user.save()
-
-        return JsonResponse({'success': True})
+    def get_queryset(self):
+        return User.objects.get(id=self.request.user.id)
 
 
 class Balance(View):
-    def get(self, request):
-        user = check_user(request)
-        if str(user) in ('Учитель', 'Ученик'):
-            if user.card_num:
-                res = check_balance(user.card_num)
-                if res == 'Счёт не найден.':
-                    res = 'Вы указали неправильный счёт. Пожалуйста, проверьте свой баланс в настройках.'
-            else:
-                res = 'Вы не указали свой счёт в настройках.'
-
-            context = {
-                'user': user,
-                'balance': res
-            }
-
-            return render(request, 'digitalDR/balance.html', context=context)
-
-        else:
-            return user
+    pass
 
 
-class Orders(View):
-    def get(self, request):
-        user = check_user(request)
-        if str(user) == 'Учитель':
-            context = {
-                'user': user,
-                'orders': Student.objects.filter(accept=True)
-            }
+class Login(LoginView):
+    template_name = 'digitalDR/login.html'
+    form_class = AuthenticationForm
 
-            return render(request, 'digitalDR/orders.html', context=context)
 
-        elif str(user) == 'Ученик':
-            return HttpResponse('Слышь, тебе сюда нельзя')
+class Orders(DataMixin, ListView):
+    template_name = 'digitalDR/orders.html'
+    model = User
+    context_object_name = 'orders'
 
-        else:
-            return user
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        teacher_class = Class.objects.get(user=self.request.user)
+        context['lunch_count'] = 0
+        context['dinner_count'] = 0
+
+        for user in teacher_class.user.all():
+            menu = UserMenu.objects.get(user=user)
+            today = datetime.datetime.today().weekday()
+
+            if list(menu.dinner_days.values())[today]:
+                context['dinner_count'] += 1
+
+            if list(menu.lunch_days.values())[today]:
+                context['lunch_count'] += 1
+
+        return {**context, **self.get_user_context(user=self.request.user)}
+
+    def get_queryset(self):
+        teacher_class = Class.objects.get(user=self.request.user)
+        return {user: UserMenu.objects.get(user=user) for user in teacher_class.user.all()}
 
 
 class Password:
