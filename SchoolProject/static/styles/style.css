@@ -12,9 +12,10 @@
     font-style: normal;
 }
 
-@media (max-height: 480px) {
+@media (max-width: 480px) {
     .login {
-        height: 100% !important;
+        width: 100% !important;
+        margin: auto 0 !important;
     }
 }
 
@@ -109,7 +110,7 @@
     .studentFood {
         flex-direction: column;
     }
-    .lunchDays {
+    .lunchBlock {
         margin-bottom: 15px;
     }
 }
@@ -120,7 +121,6 @@
     }
     .tr__Lunch {
         display: none;
-        visibility: none;
     }
 }
 
@@ -619,9 +619,17 @@ select {
     margin: auto;
     background-color: white;
     width: 80vw;
-    height: 30vh;
     max-width: 896px;
-    min-height: 360px;
+    height: 320px;
+}
+
+.loginRegister {
+    height: 600px;
+}
+
+.helptext {
+    visibility: hidden;
+    display: none;
 }
 
 .wrap_login {
@@ -650,8 +658,11 @@ select {
     height: 50px;
     border-radius: 0;
     background-color: #c5c5c5;
-    border: 2px white solid;
+    border: 2px solid #7eb14a;
     transition: .3s;
+    outline: none;
+    font-size: 18px;
+    padding: 10px;
 }
 
 .login input:focus {
@@ -886,7 +897,7 @@ select {
 }
 
 .rowSetting__label {
-    flex-basis: 20%;
+    flex-basis: 150px;
     flex-shrink: 0;
 }
 
@@ -896,6 +907,8 @@ select {
 
 .btnSave {
     padding: 10px;
+    display: block;
+    margin: 0 auto;
 }
 
 .cardNum {
@@ -1061,11 +1074,21 @@ label[for='CardId'] {
 .lunch__header, .dinner__header {
     text-align: center;
     margin-bottom: 10px;
+    padding: 5px;
+    border-bottom: 1px solid black;
+}
+
+.foodBlock {
+    border: 2px solid black;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    margin-bottom: 10px;
 }
 
 .lunchDays, .dinnerDays {
     display: flex;
     justify-content: space-around;
+    padding: 10px;
 }
 
 .lunchDay, .lunchDay_active, .dinnerDay, .dinnerDay_active {
@@ -1073,6 +1096,7 @@ label[for='CardId'] {
     padding: 3px;
     border-radius: 50%;
     border: 1px solid black;
+    cursor: pointer;
 }
 
 .lunchDay_active, .dinnerDay_active {
@@ -1102,5 +1126,59 @@ label[for='CardId'] {
 
 .settings__body a {
     display: block;
+    margin-bottom: 10px;
+}
+
+a.btn:hover {
+    transition: .3s;
+    transform: scaleX(1.1) scaleY(1.1);
+}
+
+a.btn {
+    text-decoration: none;
+}
+
+.setting {
+    padding: 30px;
+}
+
+.rowSetting__input > input {
+    border: inherit;
+    width: 80%;
+    background-color: inherit;
+}
+
+.rowSetting + .btn {
+    display: block;
+    margin: 0 auto;
+}
+
+.StudentChoose {
+    display: flex;
+    justify-content: space-around;
+    max-width: 1000px;
+    width: 80%;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.pageName {
+    text-align: center;
+    padding: 10px;
+    font-size: 18pt;
+}
+
+.login {
+    background-color: #7eb14a;
+    padding: 20px;
+}
+
+.login form input {
+    margin-bottom: 20px;
+}
+
+.errorlist {
+    color: red;
+    list-style-type: none;
     margin-bottom: 10px;
 }

@@ -5,7 +5,8 @@ const ADD_NEW_USER_URL = domen + 'add_user';
 const SETTINGS_URL = domen + 'settings';
 const LOGIN_URL = domen + 'login';
 const MAIN_URL = domen + 'main';
-const REQUESTS_STUDENTS_URL = domen + 'requestsStudents';
+const REQUESTS_STUDENTS_URL = domen + 'RequestsStudentsPost/';
+const CHANGE_FOOD_URL = domen + 'change/foodMenu';
 
 function f() {
     let road = document.getElementById('road');
@@ -251,85 +252,47 @@ function closeNav() {
 }
 
 function clickFoodBtn(elem) {
-    if (!elem.value) {
-        elem.style.transition = '.6s';
-        elem.style.backgroundColor = '#76b863';
-        elem.value = 'active';
+    if (elem.className.endsWith('active')) {
+        elem.className = elem.className.slice(0, -7);
     }
     else {
-        elem.style.transition = '.6s';
-        elem.style.backgroundColor = 'inherit';
-        elem.value = '';
+        elem.className = elem.className + '_active';
     }
 }
 
-function saveSettings() {
+function saveStudentChoose() {
+    let dinnerDays_active = document.getElementsByClassName('dinnerDay_active');
+    let lunchDays_active = document.getElementsByClassName('lunchDay_active');
     let csrf = document.getElementsByName('csrfmiddlewaretoken')[0];
-    let name = document.getElementById('name');
-    let lastName = document.getElementById('lastname');
-    let email = document.getElementById('email');
-    let login = document.getElementById('login');
-    let password = document.getElementById('password');
-    let schoolId = document.getElementById('schoolId');
-    let CardId = document.getElementById('CardId');
-
-    let lunch = document.getElementsByClassName('btnBlock')[0];
-    let dinner = document.getElementsByClassName('btnBlock')[1];
-
-    let btn = document.getElementsByClassName('btnSave')[0];
-    btn.disabled = true;
-
-    let sendBody = {
-        name: name.value,
-        lastName: lastName.value,
-        email: email.value,
-        login: login.value,
-        password: password.value,
-        card: schoolId.value + '-' + CardId.value,
-        lunch: {
-            Пн: false,
-            Вт: false,
-            Ср: false,
-            Чт: false,
-            Пт: false
-        },
-
-        dinner: {
-            Пн: false,
-            Вт: false,
-            Ср: false,
-            Чт: false,
-            Пт: false
-        }
-    };
-
-    for (let elem of lunch.getElementsByClassName('btnBlock__foodBtn')) {
-        if (elem.value === 'active') {
-            sendBody.lunch[elem.innerText] = true;
-        }
-    }
-
-    for (let elem of dinner.getElementsByClassName('btnBlock__foodBtn')) {
-        if (elem.value === 'active') {
-            sendBody.dinner[elem.innerText] = true;
-        }
-    }
-
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', SETTINGS_URL)
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    xhr.onload = () => {
-        if (JSON.parse(xhr.response).success) {
-            let msg = document.getElementsByClassName('settings__message')[0];
-            msg.innerText = 'Настройки успешно сохранены.';
-            msg.className = 'settings__message_active';
-            setTimeout(() => {window.location.reload()}, 2000);
-        }
+    xhr.open('POST', CHANGE_FOOD_URL);
+    let obj_to_send = {
+        dinner: {
+            'Пн': false,
+            'Вт': false,
+            'Ср': false,
+            'Чт': false,
+            'Пт': false,
+        },
+        lunch: {
+            'Пн': false,
+            'Вт': false,
+            'Ср': false,
+            'Чт': false,
+            'Пт': false,
+        },
     }
 
-    let data = JSON.stringify(sendBody)
-    xhr.send(`data=${data}&csrfmiddlewaretoken=${csrf.value}`);
+    for (let key of dinnerDays_active) {
+        obj_to_send.dinner[key.innerText] = true;
+    }
+
+    for (let key of lunchDays_active) {
+        obj_to_send.lunch[key.innerText] = true;
+    }
+
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(`csrfmiddlewaretoken=${csrf.value}&data=${JSON.stringify(obj_to_send)}`);
 }
 
 function studentAccept(elem, student_id) {

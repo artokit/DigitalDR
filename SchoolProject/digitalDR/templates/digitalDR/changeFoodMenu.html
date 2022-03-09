@@ -1,0 +1,40 @@
+{% extends "baseSetting.html" %}
+{% block header %}{{ block.super }}{% endblock %}
+{% block nav %}{{ block.super }}{% endblock %}
+{% block pageName %}
+Завтраки и Обеды
+{% endblock %}
+{% block content %}
+<div class="StudentChoose">
+    <div class="lunchBlock foodBlock">
+        <div class="lunch__header">
+            Завтраки
+        </div>
+        <div class="lunchDays">
+            {% for day, value in food.lunch_days.items %}
+            {% if value %}
+            <div class="lunchDay_active" onclick="clickFoodBtn(this)">{{ day }}</div>
+            {% else %}
+            <div class="lunchDay" onclick="clickFoodBtn(this)">{{ day }}</div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="dinnerBlock foodBlock">
+        <div class="dinner__header">
+            Обеды
+        </div>
+        <div class="dinnerDays">
+            {% for day, value in food.dinner_days.items %}
+            {% if value %}
+                <div class="dinnerDay_active" onclick="clickFoodBtn(this)">{{ day }}</div>
+            {% else %}
+                <div class="dinnerDay" onclick="clickFoodBtn(this)">{{ day }}</div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<button class="btnSave" type="button" onclick="saveStudentChoose()">Сохранить</button>
+
+{% endblock %}

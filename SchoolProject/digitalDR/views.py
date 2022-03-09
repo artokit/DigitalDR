@@ -1,19 +1,17 @@
-from django.shortcuts import render
+from django.contrib.auth import login, logout
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.views import View
 from django.contrib.auth.views import LoginView
-from django.views.generic import ListView, FormView, TemplateView
+from django.views.generic import ListView, FormView, TemplateView, CreateView, UpdateView
 from .utils import DataMixin
-from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect
+from django.contrib.auth.models import Group
 from django.core import serializers
 from .models import *
-import uuid
-import hashlib
 import json
 import requests
-from .forms import UserChange
 import datetime
 
 
@@ -56,82 +54,31 @@ class GetMenu(View):
         return HttpResponse(serializers.serialize('json', menu), content_type='application/json')
 
 
-class AddUser(View):
-    def post(self, request):
-        res = dict(request.POST)
-        d = {
-            'first_name': ['Имя', 'id_first_name'],
-            'last_name': ['Фамилия', 'id_last_name'],
-            'email': ['Email', 'id_email'],
-            'username': ['Логин', 'id_username'],
-            'password': ['Пароль', 'id_password1'],
-            'user_class': ['Класс', 'id_select_class']
-        }
-
-        for i in res:
-            if not res[i][0]:
-                return JsonResponse({
-                    'success': False,
-                    'message': f'Вы не заполнили поле {d[i][0]}.',
-                    'elem_error_id': d[i][1]
-                })
-
-        if Student.objects.filter(username=res['username'][0]):
-            return JsonResponse({
-                'success': False,
-                'message': 'Аккаунт с данным логином уже создан.',
-                'elem_error_id': d['username'][1]
-            })
-
-        if len(res['email'][0].split('@')) != 2:
-            return JsonResponse({
-                'success': False,
-                'message': 'Введите корректный Email.',
-                'elem_error_id': d['email'][1]
-            })
-
-        if Student.objects.filter(email=res['email'][0]):
-            return JsonResponse({
-                'success': False,
-                'message': 'Аккаунт с данным Email уже существует.',
-                'elem_error_id': d['email'][1]
-            })
-
-        if not Class.objects.filter(name_class=res['user_class'][0]):
-            return JsonResponse({
-                'success': False,
-                'message': 'Такого класса не существует.',
-                'elem_error_id': d['user_class'][1]
-            })
-
-        user = Student(**{
-            'name': res['first_name'][0],
-            'last_name': res['last_name'][0],
-            'email': res['email'][0],
-            'username': res['username'][0],
-            'password': Password(res['password'][0]).hash_password(),
-            'user_class': Class.objects.get(name_class=res['user_class'][0])
-        })
-
-        user.cookie = (lambda: generate_s(40))()
-
-        user.save()
-
-        request.session['cookie'] = user.cookie
-        return JsonResponse({'success': True})
-
-
 class RequestsStudents(DataMixin, ListView):
     template_name = 'digitalDR/requestsStudents.html'
-    model = User
+    model = RequestUser
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
+        context['requests'] = []
+        teacher_class = Class.objects.get(user=self.request.user)
+
+        for user in teacher_class.user.all():
+            if RequestUser.objects.filter(user=user):
+                context['requests'].append(user)
+
         return {**context, **self.get_user_context(user=self.request.user)}
 
 
-class Settings(DataMixin, FormView):
-    form_class = UserChange
+class RequestsStudentsPost(DataMixin, FormView):
+    def post(self, request, *args, **kwargs):
+        user = User.objects.get(pk=self.request.POST['id'])
+        r = RequestUser.objects.get(user=user)
+        r.delete()
+        return JsonResponse({'success': True})
+
+
+class Settings(DataMixin, TemplateView):
     template_name = 'digitalDR/settings.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -150,6 +97,27 @@ class Login(LoginView):
     template_name = 'digitalDR/login.html'
     form_class = AuthenticationForm
 
+    def get_success_url(self):
+        return reverse('menu')
+
+
+class Register(DataMixin, CreateView):
+    model = User
+    template_name = 'digitalDR/register.html'
+    form_class = UserCreationForm
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        req = RequestUser()
+        req.user = user
+        req.save()
+
+        user.groups.add(Group.objects.get(name='Ученик'))
+
+        user.save()
+        return redirect('menu')
+
 
 class Orders(DataMixin, ListView):
     template_name = 'digitalDR/orders.html'
@@ -161,34 +129,69 @@ class Orders(DataMixin, ListView):
         teacher_class = Class.objects.get(user=self.request.user)
         context['lunch_count'] = 0
         context['dinner_count'] = 0
+        if datetime.datetime.today().weekday() < 5:
+            for user in teacher_class.user.all():
+                menu = UserMenu.objects.get(user=user)
+                today = datetime.datetime.today().weekday()
 
-        for user in teacher_class.user.all():
-            menu = UserMenu.objects.get(user=user)
-            today = datetime.datetime.today().weekday()
+                if list(menu.dinner_days.values())[today]:
+                    context['dinner_count'] += 1
 
-            if list(menu.dinner_days.values())[today]:
-                context['dinner_count'] += 1
-
-            if list(menu.lunch_days.values())[today]:
-                context['lunch_count'] += 1
+                if list(menu.lunch_days.values())[today]:
+                    context['lunch_count'] += 1
 
         return {**context, **self.get_user_context(user=self.request.user)}
 
     def get_queryset(self):
         teacher_class = Class.objects.get(user=self.request.user)
-        return {user: UserMenu.objects.get(user=user) for user in teacher_class.user.all()}
+        return {user: UserMenu.objects.get(user=user) for user in teacher_class.user.all() if not RequestUser.objects.filter(user=user)}
 
 
-class Password:
-    def __init__(self, password):
-        self.salt = uuid.uuid4().hex
-        self.password = password
+# Todo: не работает.
+class ChangePassword(DataMixin, FormView):
+    model = User
+    pk_url_kwarg = 'user_id'
+    template_name = 'digitalDR/changePassword.html'
 
-    def hash_password(self):
-        return hashlib.sha256(self.salt.encode() + self.password.encode()).hexdigest() + ':' + self.salt
+    def get_form(self, form_class=None):
+        return PasswordChangeForm(self.request.user)
 
-    def check_password(self, user_password):
-        hashed_password = self.password
-        password, salt = hashed_password.split(':')
-        return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        return {**context, **self.get_user_context(user=self.request.user)}
 
+
+class ChangeFoodMenu(DataMixin, UpdateView):
+    template_name = 'digitalDR/changeFoodMenu.html'
+    model = UserMenu
+    context_object_name = 'food'
+    fields = '__all__'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        return {**context, **self.get_user_context(user=self.request.user)}
+
+    def get_object(self, queryset=None):
+        try:
+            return UserMenu.objects.get(user=self.request.user)
+
+        except UserMenu.DoesNotExist:
+            user_menu = UserMenu()
+            user_menu.user = self.request.user
+            user_menu.lunch_days = UserMenu.default_days
+            user_menu.dinner_days = UserMenu.default_days
+            user_menu.save()
+            return user_menu
+
+    def post(self, request, *args, **kwargs):
+        res = json.loads(self.request.POST['data'])
+        user_menu = UserMenu.objects.get(user=self.request.user)
+        user_menu.dinner_days = res['dinner']
+        user_menu.lunch_days = res['lunch']
+        user_menu.save()
+        return JsonResponse({'success': True})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('login')

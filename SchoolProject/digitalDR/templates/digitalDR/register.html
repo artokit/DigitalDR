@@ -1,10 +1,10 @@
 {% extends 'baseAuth.html' %}
 {% block contentForm %}
-<div class="login">
+<div class="login loginRegister">
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btnSave">Войти</button>
+        <button type="submit" class="btnSave">Создать</button>
     </form>
 </div>
 {% endblock %}

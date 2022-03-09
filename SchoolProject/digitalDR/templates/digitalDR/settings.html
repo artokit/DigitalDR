@@ -7,9 +7,9 @@
 
     </div>
     <div class="settings__body">
-        <a href="#">Изменить пароль</a>
+        <a href="{% url 'ChangePassword' user.id %}">Изменить пароль</a>
         <a href="#">Изменить личные данные</a>
-        <a href="#">Изменить Завтраки и Обеды</a>
+        <a href="{% url 'ChangeFoodMenu' %}">Изменить Завтраки и обеды</a>
     </div>
 </div>
 {% endblock %}

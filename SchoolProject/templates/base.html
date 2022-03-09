@@ -11,12 +11,30 @@
     <title>{% block title %}Электронная столовая{% endblock %}</title>
 </head>
 <body>
-    {% block header %}
-        {% include "inc/_header.html" %}
-    {% endblock %}
-    {% block nav %}
-        {% include "inc/_nav.html" %}
-    {% endblock %}
-    {% block content %}{% endblock %}
+{% if user.is_authenticated %}
+{% block header %}
+{% include "inc/_header.html" %}
+{% endblock %}
+{% block nav %}
+{% include "inc/_nav.html" %}
+{% endblock %}
+{% block content %}{% endblock %}
+{% else %}
+<div class="error">
+    <div class="error__image">
+        <img src="{% static 'images/broken.png' %}" alt="Сломанный компьютер">
+    </div>
+    <div class="error__text">
+        <h2 class="error__header">Упс!</h2>
+        <div class="error__message">
+            Чтобы продолжить, вы должны быть авторизованы.
+            <br>
+            <div class="btn_wrap">
+                <button onclick="(() => {window.location = '/login/'})()" class="btn">Авторизация</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 </body>
 </html>
