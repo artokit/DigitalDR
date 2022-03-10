@@ -1,0 +1,20 @@
+{% extends 'baseAuth.html' %}
+{% block contentForm %}
+<div class="login">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="selectClass">
+            <label for="selectClass__select">Класс:</label>
+            <select id="selectClass__select">
+                {% for class in classes %}
+                {% if class.name_class != 'kicked' %}
+                    <option>{{ class.name_class }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <button type="button" class="btnSave" onclick="saveInformation()">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

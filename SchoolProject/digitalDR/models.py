@@ -12,18 +12,10 @@ class Menu(models.Model):
 
 class Class(models.Model):
     name_class = models.CharField(max_length=10)
-    user = models.ManyToManyField(User, blank=True)
-
-    def __str__(self):
-        return self.name_class
 
 
-class RequestUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-
-class UserMenu(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class UserInformation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     default_days = {
         'Пн': False,
@@ -35,3 +27,5 @@ class UserMenu(models.Model):
 
     dinner_days = models.JSONField(default=default_days)
     lunch_days = models.JSONField(default=default_days)
+    is_accept = models.BooleanField(default=False)
+    user_class = models.ForeignKey(Class, on_delete=models.CASCADE, null=True, blank=True)

@@ -1,3 +1,21 @@
+/* normalize css */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}
+
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
+
+html{height:100%}
+
+body{line-height:1; font-family: Roboto, sans-serif}
+
+ol,ul{list-style:none}
+
+blockquote,q{quotes:none}
+
+blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}
+
+table{border-collapse:collapse;border-spacing:0}
+
+
 @font-face {
     font-family: 'Roboto Black';
     src: local('Roboto Black'), local('Roboto-Black'), url('../fonts/Robotoblack.woff2') format('woff2'), url('../fonts/Robotoblack.woff') format('woff'), url('../fonts/Robotoblack.ttf') format('truetype');
@@ -56,9 +74,6 @@
 }
 
 @media (max-width: 992px) {
-    .section_body__image img {
-        width: 40% !important;
-    }
     #load {
         background-size: 20% !important;
     }
@@ -112,15 +127,6 @@
     }
     .lunchBlock {
         margin-bottom: 15px;
-    }
-}
-
-@media (max-width: 650px) {
-    .tr__Dinner {
-        display: none;
-    }
-    .tr__Lunch {
-        display: none;
     }
 }
 
@@ -393,7 +399,7 @@ hr {
 }
 
 .section_body__image img {
-    width: 350px
+    width: 40%
 }
 
 .section_body__text {
@@ -1065,6 +1071,7 @@ label[for='CardId'] {
     padding: 15px;
     max-width: 1600px;
     margin: 0 auto;
+    text-align: center;
 }
 
 .requests__nullRequests {
@@ -1073,7 +1080,6 @@ label[for='CardId'] {
 
 .lunch__header, .dinner__header {
     text-align: center;
-    margin-bottom: 10px;
     padding: 5px;
     border-bottom: 1px solid black;
 }
@@ -1091,8 +1097,13 @@ label[for='CardId'] {
     padding: 10px;
 }
 
+td > .lunchDays, td > .dinnerDays {
+    flex-direction: column;
+    align-items: center;
+}
+
 .lunchDay, .lunchDay_active, .dinnerDay, .dinnerDay_active {
-    margin: 0 5px;
+    margin: 1px 5px;
     padding: 3px;
     border-radius: 50%;
     border: 1px solid black;
@@ -1171,6 +1182,7 @@ a.btn {
 .login {
     background-color: #7eb14a;
     padding: 20px;
+    position: static;
 }
 
 .login form input {
@@ -1181,4 +1193,19 @@ a.btn {
     color: red;
     list-style-type: none;
     margin-bottom: 10px;
+}
+
+.FlexLogin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.list {
+    list-style-type: none;
+}
+
+.errorlist {
+    margin: 5px 0;
 }

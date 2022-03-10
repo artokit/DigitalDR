@@ -7,7 +7,11 @@
     <div class="navUser">
         <div class="navUser__data user">
             <div class="user__name">
-                {{ user.first_name.capitalize }} {{ user.last_name.upper.0 }}.
+                {% if user.first_name and user.last_name %}
+                {{ user.first_name.capitalize }} {{ user.last_name.capitalize.0 }}
+                {% else %}
+                {{ user.username }}
+                {% endif %}
             </div>
             <div class="user__avatar">
                 {% if user.is_teacher %}

@@ -11,7 +11,11 @@
 
                     </div>
                     <div class="student__name">
+                        {% if student.last_name %}
                         {{ student.first_name.capitalize }} {{ student.last_name.capitalize }}
+                        {% else %}
+                        {{ student.username }}
+                        {% endif %}
                     </div>
                     <div class="student__buttons">
                         <div class="btns">

@@ -7,6 +7,7 @@ const LOGIN_URL = domen + 'login';
 const MAIN_URL = domen + 'main';
 const REQUESTS_STUDENTS_URL = domen + 'RequestsStudentsPost/';
 const CHANGE_FOOD_URL = domen + 'change/foodMenu';
+const CHANGE_INFORMATION_URL = domen + 'change/information/'
 
 function f() {
     let road = document.getElementById('road');
@@ -311,4 +312,24 @@ function studentAccept(elem, student_id) {
     xhr.open('POST', REQUESTS_STUDENTS_URL);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send(`csrfmiddlewaretoken=${csrf.value}&id=${student_id}&type=${accept}`);
+}
+
+function saveInformation() {
+    const xhr = new XMLHttpRequest();
+    let csrf = document.getElementsByName('csrfmiddlewaretoken')[0];
+    let first_name = document.getElementById('id_first_name').value;
+    let last_name = document.getElementById('id_last_name').value;
+    let user_class = document.getElementById('selectClass__select').value;
+
+    xhr.onload = () => {
+        let res = JSON.parse(xhr.response);
+        if (res['success']) {
+            window.location.href = SETTINGS_URL;
+        }
+    }
+
+    xhr.open('POST', CHANGE_INFORMATION_URL);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    console.log(user_class);
+    xhr.send(`csrfmiddlewaretoken=${csrf.value}&first_name=${first_name}&last_name=${last_name}&user_class=${user_class}`);
 }

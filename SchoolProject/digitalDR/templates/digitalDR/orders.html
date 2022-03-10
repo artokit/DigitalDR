@@ -19,17 +19,21 @@
             <td class="tr__LastName">Фамилия</td>
             <td>Завтраки</td>
             <td>Обеды</td>
-            {% for order, order_menu in orders.items %}
+            {% for order in orders %}
         </tr>
         <td class="tr__FirstName">
-            {{ order.first_name.capitalize }}
+            {% if order.user.first_name %}
+            {{ order.user.first_name.capitalize }}
+            {% else %}
+            {{ order.user.username }}
+            {% endif %}
         </td>
         <td class="tr__LastName">
-            {{ order.last_name.capitalize }}
+            {{ order.user.last_name.capitalize }}
         </td>
         <td class="tr__Lunch">
             <div class="lunchDays">
-                {% for day, value in order_menu.lunch_days.items %}
+                {% for day, value in order.lunch_days.items %}
                 {% if value %}
                 <div class="lunchDay_active">{{ day }}</div>
                 {% else %}
@@ -40,7 +44,7 @@
         </td>
         <td class="tr__Dinner">
             <div class="dinnerDays">
-                {% for day, value in order_menu.dinner_days.items %}
+                {% for day, value in order.dinner_days.items %}
                 {% if value %}
                 <div class="dinnerDay_active">{{ day }}</div>
                 {% else %}
