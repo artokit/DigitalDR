@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import time
 
 
 class Menu(models.Model):
@@ -29,3 +30,4 @@ class UserInformation(models.Model):
     lunch_days = models.JSONField(default=default_days)
     is_accept = models.BooleanField(default=False)
     user_class = models.ForeignKey(Class, on_delete=models.CASCADE, null=True, blank=True)
+    card_num = models.CharField(max_length=20, blank=True)

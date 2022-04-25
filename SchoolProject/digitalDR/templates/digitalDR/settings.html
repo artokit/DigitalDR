@@ -1,15 +1,45 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block header %}{{ block.super }}{% endblock %}
 {% block nav %}{{ block.super }}{% endblock %}
 {% block content %}
 <div class="settings">
-    <div class="settings__message">
-
-    </div>
     <div class="settings__body">
-        <a href="{% url 'ChangePassword' user.id %}">Изменить пароль</a>
-        <a href="{% url 'ChangeUserInformation' user.id %}">Изменить личные данные</a>
-        <a href="{% url 'ChangeFoodMenu' %}">Изменить Завтраки и обеды</a>
+        <div class="settingCard">
+            <div class="settingCard__head">
+                Пароль
+            </div>
+            <div class="settingCard__body">
+                <img src="{% static 'images/password.svg' %}" height="70px" class="CardImg">
+            </div>
+            <div class="settingCard__footer">
+                <a href="{% url 'ChangePassword' %}" class="cardLink">Изменить</a>
+            </div>
+        </div>
+
+        <div class="settingCard privateCard">
+            <div class="settingCard__head">
+                Личные данные
+            </div>
+            <div class="settingCard__body">
+                <img src="{% static 'images/private.png' %}" height="70px" class="CardImg">
+            </div>
+            <div class="settingCard__footer">
+                <a href="{% url 'ChangeUserInformation' %}" class="cardLink">Изменить</a>
+            </div>
+        </div>
+
+        <div class="settingCard foodCard">
+            <div class="settingCard__head">
+                Завтраки и Обеды
+            </div>
+            <div class="settingCard__body">
+                <img src="{% static 'images/pizza.png' %}" height="70px" class="CardImg">
+            </div>
+            <div class="settingCard__footer">
+                <a href="{% url 'ChangeFoodMenu' %}" class="cardLink">Изменить</a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

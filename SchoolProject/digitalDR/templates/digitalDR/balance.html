@@ -1,9 +1,50 @@
 {% extends 'base.html' %}
-
+{%  load static %}
 {% block content %}
-    {% autoescape on %}
-        <div class="balance">
-            {{ balance|safe }}
+{% csrf_token %}
+{% block check_kick %} {{ block.super }} {% endblock %}
+<div class="balance">
+    <div class="balance__send">
+        <label for="NumberCard">Введите номер карты (XX-XXXXXX)</label>
+        <div class="wrapBalance">
+            {% if user_info.card_num %}
+            <input type="text" id="NumberCard" value="{{ user_info.card_num }}">
+            {% else %}
+            <input type="text" id="NumberCard">
+            {% endif %}
+            <img src="{% static 'images/refresh.svg' %}" class="refreshInfo" onclick="getBalance()" width="32px">
         </div>
-    {% endautoescape %}
+
+    </div>
+    <div class="BalanceError">
+
+    </div>
+    <div class="balance__time">
+        <div class="time__lastTime">
+            {{ user_info.balance_last_time }}
+        </div>
+        <div class="time__vis">
+
+        </div>
+    </div>
+    <div class="balance__info balanceInfo">
+        {% if user_info.card_num %}
+        <div class="balanceInfo__header">
+            Лицевой счёт
+        </div>
+        <hr class="medium_hr">
+        <div class="balanceInfo__body balanceBody">
+            <div class="balanceBody__cardNum">
+                Счёт №<span id="CardId">{{ user_info.card_num }}</span>
+            </div>
+            <div class="balanceBody__hotMeal hotMeal">
+
+                <div class="balanceFood">
+                    Горячее Питание: <span id="hotMealBalance"> {{ user_balance }} Р.</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

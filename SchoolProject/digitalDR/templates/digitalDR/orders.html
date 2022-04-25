@@ -13,58 +13,40 @@
 
 {% block content %}
 <div class="orders">
-    <table class="UserTable">
-        <tr>
-            <td class="tr__FirstName">Имя</td>
-            <td class="tr__LastName">Фамилия</td>
-            <td>Завтраки</td>
-            <td>Обеды</td>
-            {% for order in orders %}
-        </tr>
-        <td class="tr__FirstName">
-            {% if order.user.first_name %}
-            {{ order.user.first_name.capitalize }}
-            {% else %}
-            {{ order.user.username }}
-            {% endif %}
-        </td>
-        <td class="tr__LastName">
-            {{ order.user.last_name.capitalize }}
-        </td>
-        <td class="tr__Lunch">
-            <div class="lunchDays">
-                {% for day, value in order.lunch_days.items %}
-                {% if value %}
-                <div class="lunchDay_active">{{ day }}</div>
-                {% else %}
-                <div class="lunchDay">{{ day }}</div>
-                {% endif %}
-                {% endfor %}
+    {% csrf_token %}
+    <div class="orders__count count">
+        <div class="count__lunch">
+            Количество завтраков: {{ lunch_count }}
+        </div>
+        <div class="count__dinner">
+            Количество обедов: <span>{{ dinner_count }}</span>
+        </div>
+    </div>
+    {% for order in orders %}
+
+    {% if order.user == user %}
+
+    {% else %}
+    <div class="userOrder">
+        <div class="userOrder__name">
+            {{ order.user.get_full_name }}
+        </div>
+        <div class="userOrder__extra extra">
+            <div class="extra__data_hidden extraData">
+                <div class="extraData__userID">
+                    {{ order.user.pk }}
+                </div>
             </div>
-        </td>
-        <td class="tr__Dinner">
-            <div class="dinnerDays">
-                {% for day, value in order.dinner_days.items %}
-                {% if value %}
-                <div class="dinnerDay_active">{{ day }}</div>
-                {% else %}
-                <div class="dinnerDay">{{ day }}</div>
-                {% endif %}
-                {% endfor %}
+            <div class="extra__more">
+                <button class="extra_button" onclick="showMoreInfo(this)">Подробнее</button>
             </div>
-        </td>
-        {% endfor %}
-        <tr>
-            <td colspan="2">
-                Количество сегодня
-            </td>
-            <td>
-                {{  lunch_count  }}
-            </td>
-            <td>
-                {{ dinner_count }}
-            </td>
-        </tr>
-    </table>
+            <div class="extra__btns">
+                <button class="buttonStudent buttonStudentCancel" onclick="kickUser(this, {{ order.user.id }})">&#10006;</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% endfor %}
 </div>
 {% endblock %}

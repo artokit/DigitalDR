@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block header %}{{ block.super }}{% endblock %}
 {% block nav %}{{ block.super }}{% endblock %}
 {% block content %}
@@ -8,7 +9,7 @@
             {% for student in requests %}
                 <div class="requests__student student" id="student{{ student.id }}">
                     <div class="student__photo">
-
+                        <img src="{% static 'images/user.png' %}" width="64px">
                     </div>
                     <div class="student__name">
                         {% if student.last_name %}

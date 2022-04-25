@@ -1,3 +1,4 @@
+{% load static %}
 <div class="mainHeader">
     <div class="header__btnNav btnNav" onclick="viewNav()">
         <div class="btnNav__stick"></div>
@@ -8,16 +9,16 @@
         <div class="navUser__data user">
             <div class="user__name">
                 {% if user.first_name and user.last_name %}
-                {{ user.first_name.capitalize }} {{ user.last_name.capitalize.0 }}
+                {{ user.first_name.capitalize }} {{ user.last_name.capitalize.0 }}.
                 {% else %}
                 {{ user.username }}
                 {% endif %}
             </div>
             <div class="user__avatar">
-                {% if user.is_teacher %}
-                <img src="" alt="" id="ateacher">
+                {% if is_teacher %}
+                <img src="{% static 'images/teacher.png' %}" width="64px">
                 {% else %}
-                <img src="" alt="" id="nt">
+                <img src="{% static 'images/user.png' %}" width="64px">
                 {% endif %}
             </div>
         </div>

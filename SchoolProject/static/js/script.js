@@ -1,13 +1,13 @@
 "use strict";
 const domen = 'http://127.0.0.1:8000/';
 const GET_MENU_URL = domen + 'get_menu';
-const ADD_NEW_USER_URL = domen + 'add_user';
 const SETTINGS_URL = domen + 'settings';
 const LOGIN_URL = domen + 'login';
-const MAIN_URL = domen + 'main';
 const REQUESTS_STUDENTS_URL = domen + 'RequestsStudentsPost/';
 const CHANGE_FOOD_URL = domen + 'change/foodMenu';
-const CHANGE_INFORMATION_URL = domen + 'change/information/'
+const CHANGE_INFORMATION_URL = domen + 'change/information/';
+const GET_BALANCE = domen + 'balance/';
+const ORDER_URL = domen + 'orders/'
 
 function f() {
     let road = document.getElementById('road');
@@ -34,10 +34,18 @@ function viewModalWindow(head, body) {
     if (document.getElementsByClassName('modal_window').length) {
         return false;
     }
+
     let background = document.createElement('div');
+
     let modalWindow = document.createElement('div');
     let modalHead = document.createElement('div');
     let modalBody = document.createElement('div');
+
+    if (body) {
+        modalBody.innerHTML = body;
+    }
+
+    let modalClose = document.createElement('div');
     let close = document.createElement('div');
     let html = document.getElementsByTagName('html')[0];
     modalHead.innerHTML = `<h2>${head}</h2>`;
@@ -49,25 +57,13 @@ function viewModalWindow(head, body) {
     modalBody.className = 'modal_body';
     background.className = 'back';
     modalWindow.className = 'modal_window';
+    modalClose.className = 'modal_close';
     html.appendChild(background);
-    background.appendChild(close);
+    modalClose.appendChild(close);
     background.appendChild(modalWindow);
+    modalWindow.appendChild(modalClose);
     modalWindow.appendChild(modalHead);
     modalWindow.appendChild(modalBody);
-}
-
-function viewRegForm() {
-    let regForm = document.getElementsByClassName('registration')[0];
-    regForm.style.visibility = 'visible';
-    regForm.style.display = 'block';
-    setTimeout(scrollToRegForm, 100);
-}
-
-function scrollToRegForm() {
-    document.getElementsByClassName('form_reg__footer')[0].scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-    })
 }
 
 function get_menu() {
@@ -109,60 +105,6 @@ function del_load() {
     elem_load.remove();
 }
 
-function anim_error(elem) {
-    elem.style.animation = 'error_elem_anim .8s ease';
-    setTimeout(() => {
-        elem.style.animation = 'none';
-    }, 1000);
-}
-
-function add_new_user() {
-    let csrf = document.getElementsByName('csrfmiddlewaretoken')[0];
-    let first_name = document.getElementById('id_first_name');
-    let last_name = document.getElementById('id_last_name');
-    let email = document.getElementById('id_email');
-    let username = document.getElementById('id_username');
-    let password1 = document.getElementById('id_password1');
-    let password2 = document.getElementById('id_password2');
-    let error_messages = document.getElementsByClassName('error_messages')[0];
-    let user_class = document.getElementById('id_select_class');
-
-    if (password1.value !== password2.value) {
-        error_messages.innerText = 'Пароли не совпадают.';
-        anim_error(password1);
-        anim_error(password2);
-        return false;
-    }
-
-    if (!user_class.value) {
-        error_messages.innerText = 'Выберите класс.';
-        user_class.style.animation = 'error_elem_anim_from_black 1s ease';
-        setTimeout(() => {
-            user_class.style.animation = 'none';
-        }, 1000);
-        return false;
-    }
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', ADD_NEW_USER_URL);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    xhr.onload = function () {
-        let res = JSON.parse(xhr.response);
-
-        if (!res.success) {
-            error_messages.innerText = res.message;
-            let elem_error = document.getElementById(res.elem_error_id);
-            anim_error(elem_error);
-            return false;
-        } else if (res.success) {
-            document.location.href = MAIN_URL;
-        }
-    };
-
-    xhr.send(`csrfmiddlewaretoken=${csrf.value}&first_name=${first_name.value}&last_name=${last_name.value}&email=${email.value}&username=${username.value}&password=${password1.value}&user_class=${user_class.value}`);
-}
-
 function replaceBlock(elem) {
     let student = document.getElementById('student');
     let teacher = document.getElementById('teacher');
@@ -183,25 +125,6 @@ function replaceBlock(elem) {
         login__sform.style.visibility = 'visible';
         login__tform.style.opacity = '0';
         login__tform.style.visibility = 'hidden';
-    }
-}
-
-function ModalLogin() {
-    document.documentElement.style.overflowY = 'hidden';
-    document.getElementsByClassName('wrap')[0].scrollIntoView({
-        block: 'start'
-    });
-    let modalWindow = document.getElementsByClassName('wrap_login')[0];
-    let elem_close = document.getElementsByClassName('close')[0];
-    elem_close.onclick = () => {
-        modalWindow.style.display = 'none';
-        document.documentElement.style.overflowY = 'scroll';
-    };
-    if (modalWindow.classList.length === 2) {
-        return false;
-    }
-    else {
-        modalWindow.style.display = 'block';
     }
 }
 
@@ -266,6 +189,22 @@ function saveStudentChoose() {
     let lunchDays_active = document.getElementsByClassName('lunchDay_active');
     let csrf = document.getElementsByName('csrfmiddlewaretoken')[0];
     const xhr = new XMLHttpRequest();
+
+    let msg_elem = document.getElementsByClassName('success_message')[0];
+    msg_elem.innerHTML = '';
+    msg_elem.style.visibility = 'hidden';
+    msg_elem.style.display = 'none';
+
+    xhr.onload = () => {
+        let res = JSON.parse(xhr.response);
+        if (res['success'] === true) {
+            msg_elem.innerHTML = 'Данные успешно сохранены';
+            msg_elem.style.display = 'block';
+            msg_elem.style.visibility = 'visible';
+            msg_elem.style.transition = '.6s';
+        }
+    };
+
     xhr.open('POST', CHANGE_FOOD_URL);
     let obj_to_send = {
         dinner: {
@@ -330,6 +269,170 @@ function saveInformation() {
 
     xhr.open('POST', CHANGE_INFORMATION_URL);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    console.log(user_class);
     xhr.send(`csrfmiddlewaretoken=${csrf.value}&first_name=${first_name}&last_name=${last_name}&user_class=${user_class}`);
+}
+
+function getBalance() {
+    const xhr = new XMLHttpRequest();
+    let csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    let card_num = document.getElementById('NumberCard').value;
+    let hotMealBalance = document.getElementById('hotMealBalance');
+    let CardId = document.getElementById('CardId');
+    let time__lastTime = document.getElementsByClassName('time__lastTime')[0];
+    let error = document.getElementsByClassName('BalanceError')[0];
+
+    let d = new Date();
+    let time = d.getTime();
+
+    error.style.visibility = 'hidden';
+    error.style.display = 'none';
+
+    if ((Number(time__lastTime.innerHTML) + 180) * 1000 > time) {
+        error.innerHTML = 'Отправьте запрос позже';
+        error.style.visibility = 'visible';
+        error.style.display = 'block';
+        error.style.color = 'red';
+        return false;
+    }
+
+    xhr.open('POST', GET_BALANCE, true);
+    xhr.onload = () => {
+        let res = JSON.parse(xhr.response);
+
+        if (res['success']) {
+            if (!hotMealBalance) {
+                window.location.href = '';
+            }
+
+            hotMealBalance.innerText = res['result']['hot_meal_money'] + ' Р.';
+            CardId.innerText = card_num;
+        }
+
+        else {
+            error.innerHTML = res['text'];
+            error.style.color = 'red';
+            error.style.visibility = 'visible';
+            error.style.display = 'block';
+        }
+    }
+
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(`csrfmiddlewaretoken=${csrf}&card_num=${card_num}`);
+}
+
+function kickUser(elem, user_id) {
+    const xhr = new XMLHttpRequest();
+    let csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    xhr.open('POST', ORDER_URL);
+
+    xhr.onload = () => {
+        let res = JSON.parse(xhr.response);
+
+        if (res['success']) {
+            elem.parentElement.parentElement.parentElement.remove();
+        }
+    }
+
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(`csrfmiddlewaretoken=${csrf}&user_id=${user_id}&act=kick`);
+}
+
+function showMoreInfo(elem) {
+    const xhr = new XMLHttpRequest();
+    let csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    xhr.open('POST', ORDER_URL);
+
+    xhr.onload = () => {
+        let res = JSON.parse(xhr.response);
+
+        if (res['success']) {
+            let cardNum = document.getElementById('cardNum');
+            cardNum.innerText = res['card_num'];
+            let cardBalance = document.getElementById('cardBalance');
+            cardBalance.innerText = res['balance_card'] + ' Р';
+            let lunch_elem = getHTMLFood('Завтраки', res['lunch']);
+            let dinner_elem = getHTMLFood('Обеды', res['dinner']);
+            let StudentChoose = document.getElementsByClassName('StudentChoose')[0];
+            StudentChoose.innerHTML = lunch_elem + dinner_elem;
+        }
+    }
+
+    let body = `<div class='userInfo'>
+        <div class='userInfo__food checkFood'>
+        <hr class='medium_hr'>
+        <div class='checkFood__header'>Завтраки и обеды</div>
+        <div class='StudentChoose'></div>
+        </div>
+        <div class='userInfo__cardInfo cardInfo'>
+        <div class='cardInfo__header'>Информация о карте</div>
+        <div class='cardInfo__cardNum'>Номер карты: <span id='cardNum'>Загрузка...</span></div>
+        <div class='cardInfo__cardBalance'>Баланс: <span id='cardBalance'>Загрузка...</span></div>
+        </div>
+        </div>`;
+
+    let userBlock = elem.parentElement.parentElement.parentElement;
+    let fullName = userBlock.getElementsByClassName('userOrder__name')[0].textContent;
+    let extraDataBlock = userBlock.getElementsByClassName('extraData')[0];
+    let user_id = Number(extraDataBlock.getElementsByClassName('extraData__userID')[0].textContent);
+
+    viewModalWindow(fullName, body);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(`csrfmiddlewaretoken=${csrf}&user_id=${user_id}&act=info`);
+}
+
+function getHTMLFood(head, data) {
+    let table = '';
+    for (let key in data) {
+        if (data[key]) {
+            table += `<div class="lunchDay_active">${key}</div>`;
+        }
+        else {
+            table += `<div class="lunchDay"">${key}</div>`;
+        }
+    }
+
+    let body = `<div class="lunchBlock foodBlock">
+        <div class="lunch__header">
+            ${head}
+        </div>
+        <div class="lunchDays">
+            ${table}
+        </div>
+    </div>`;
+
+    return body;
+}
+
+function hideMenuInfo(elem) {
+    let menu_block = elem.parentElement.parentElement;
+    let image = menu_block.getElementsByClassName('section_body__image')[0];
+    let text = menu_block.getElementsByClassName('section_body__text')[0];
+    let menu = menu_block.getElementsByClassName('section_body__menu')[0];
+
+    if (!menu.style.height) {
+        elem.innerHTML = 'Скрыть';
+        menu.style.transition = '.3s';
+        menu.style.height = '100%';
+        menu.style.opacity = '1';
+
+        text.style.transition = '.3s';
+        text.style.opacity = '0';
+
+        image.style.transition = '.3s';
+        image.style.width = '0';
+        image.style.opacity = '0';
+    }
+    else {
+        elem.innerHTML = 'Посмотреть';
+        menu.style.transition = '.3s';
+        menu.style.height = '';
+        menu.style.opacity = '0';
+
+        text.style.transition = '.3s';
+        text.style.opacity = '1';
+
+        image.style.transition = '.3s';
+        image.style.width = '100%';
+        image.style.opacity = '1';
+    }
 }

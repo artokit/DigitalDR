@@ -20,6 +20,12 @@
 {% endblock %}
 {% block content %}{% endblock %}
 {% else %}
+{% block check_kick %}
+    {% if is_kicked %}
+<script src="{% static 'js/modalKick.js' %}">
+</script>
+    {% endif %}
+{% endblock %}
 <div class="error">
     <div class="error__image">
         <img src="{% static 'images/broken.png' %}" alt="Сломанный компьютер">

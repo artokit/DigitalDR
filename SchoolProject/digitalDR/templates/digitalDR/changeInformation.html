@@ -3,7 +3,14 @@
 <div class="login">
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <p>
+            <label for="id_first_name">Имя:</label>
+            <input type="text" name="first_name" maxlength="150" id="id_first_name" value="{{ user.first_name }}">
+        </p>
+        <p>
+            <label for="id_last_name">Фамилия:</label>
+            <input type="text" name="last_name" maxlength="150" id="id_last_name" value="{{ user.last_name }}">
+        </p>
         <div class="selectClass">
             <label for="selectClass__select">Класс:</label>
             <select id="selectClass__select">

@@ -1,0 +1,15 @@
+{% extends "baseSetting.html" %}
+{% block header %}{{ block.super }}{% endblock %}
+{% block nav %}{{ block.super }}{% endblock %}
+{% block pageName %}
+Фото Профиля
+{% endblock %}
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button class="btnSave">Сохранить</button>
+</form>
+
+{% endblock %}

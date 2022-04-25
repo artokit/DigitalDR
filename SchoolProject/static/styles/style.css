@@ -128,6 +128,12 @@ table{border-collapse:collapse;border-spacing:0}
     .lunchBlock {
         margin-bottom: 15px;
     }
+    .success_message {
+        width: 80% !important;
+    }
+    .kickModalWindow__body {
+        flex-direction: column;
+    }
 }
 
 * {
@@ -262,9 +268,9 @@ hr {
     animation-delay: 1.5s;
     left: 100%;
     background-image: url("../images/logo.png");
+    background-size: 96px;
     background-repeat: no-repeat;
     background-color: #c8e7a1;
-    background-size: contain;
     background-position: center;
 }
 
@@ -403,6 +409,7 @@ hr {
 }
 
 .section_body__text {
+    transition: .3s;
     margin: 30px 0;
     color: white;
 }
@@ -430,7 +437,8 @@ hr {
     margin: auto;
     padding: 30px;
     text-align: center;
-    overflow-y: scroll;
+    overflow-y: auto;
+    font-family: 'Roboto', sans-serif;
 }
 
 .modal_window::-webkit-scrollbar-track {
@@ -462,16 +470,17 @@ hr {
     background: url(../images/close.png) no-repeat center center;
     width: 32px;
     height: 32px;
-    position: absolute;
-    top: 30px;
-    right: 30px;
     background-size: contain;
     cursor: pointer;
-    transition: 1s;
+}
+
+.modal_close {
+    display: flex;
+    justify-content: right;
 }
 
 .close:hover {
-    transform: rotateZ(360deg);
+    opacity: .6;
 }
 
 #load {
@@ -499,6 +508,8 @@ hr {
 
 .modal_head h2 {
     margin-bottom: 30px;
+    font-size: 24pt;
+    font-family: 'Roboto', sans-serif;
 }
 
 .menu_name, .menu_cost {
@@ -527,26 +538,6 @@ select {
     margin-left: 15%;
     font-size: 14pt;
     border: 1px solid black;
-}
-
-@keyframes show_modal_window {
-    0% {
-        width: 0;
-        height: 0;
-    }
-    75% {
-        width: 60vw;
-        height: 50vh;
-    }
-    100% {
-        width: 50vw;
-        height: 40vh;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        margin: auto;
-    }
 }
 
 @keyframes show {
@@ -818,6 +809,7 @@ select {
     background-color: #608d33;
     display: flex;
     flex-direction: column;
+    z-index: 1;
 }
 
 .nav__user {
@@ -1076,6 +1068,8 @@ label[for='CardId'] {
 
 .requests__nullRequests {
     text-align: center;
+    font-size: 24pt;
+    font-family: Roboto, sans-serif;
 }
 
 .lunch__header, .dinner__header {
@@ -1208,4 +1202,312 @@ a.btn {
 
 .errorlist {
     margin: 5px 0;
+}
+
+.balance {
+    padding: 50px;
+}
+
+#NumberCard {
+    margin: 10px 0;
+    width: 300px;
+}
+
+.refreshInfo {
+    cursor: pointer;
+    transition: .3s;
+    transform: rotateZ(0);
+}
+
+.refreshInfo:hover {
+    transition: .6s;
+    transform: rotateZ(360deg);
+}
+
+.wrapBalance {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 400px;
+}
+
+.balance__info {
+    width: 100%;
+    max-width: 800px;
+    font-size: 24pt;
+    text-align: center;
+    margin: 20px auto;
+}
+
+.residue span {
+    background: #ffeeab;
+    padding: 5px;
+}
+
+.type_balance .residue {
+    font-size: 18px;
+    margin-top: 15px;
+}
+
+.type_balance .name span {
+    color: #9aa8b2;
+    font-size: 13px;
+}
+
+.type_balance {
+    margin-bottom: 20px;
+}
+
+.time__lastTime {
+    display: none;
+    visibility: hidden;
+}
+
+.user__avatar img {
+    border-radius: 50%;
+}
+
+.success_message {
+    visibility: hidden;
+    display: none;
+    transition: all 0.6s ease 0s;
+    margin: 0 auto 20px auto;
+    width: 30%;
+    padding: 15px 30px;
+    border-radius: 20px;
+    background-color: yellowgreen;
+    color: white;
+    font-size: 24pt;
+    text-align: center;
+}
+
+.settingCard {
+    width: 150px;
+    border-radius: 30px;
+    background-color: #a600ff;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.settingCard__head {
+    font-size: 18pt;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settingCard__body {
+    height: 70px;
+    margin: 10px 0;
+}
+
+.settingCard__footer a {
+    font-size: 14pt;
+    color: white;
+    text-decoration: none;
+    background-color: #e53d3d;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: 3px solid #e53d3d;
+    transition: .3s;
+}
+
+.settingCard__footer a:hover {
+    background-color: inherit;
+    transition: .3s;
+}
+
+.settingCard__body img {
+    transition: .3s;
+    filter: blur(3px);
+}
+
+.settingCard:hover .settingCard__body img {
+    transition: .3s;
+    filter: blur(0) !important;
+}
+
+.settings__body {
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.privateCard {
+    background-color: #0037ff;
+}
+
+.foodCard {
+    background-color: #ff5e00;
+}
+
+.balanceBody__cardNum {
+    opacity: .6;
+    text-align: right;
+    font-size: 12pt;
+}
+
+.balanceBody__cardNum {
+    margin: 30px 20px 30px 0;
+}
+
+.balanceFood {
+    text-align: left;
+    margin: 42px 0;
+    font-size: 18pt;
+}
+
+.balanceInfo__lastTimeRefresh {
+    text-align: left;
+    margin: 20px 0 0 0;
+    font-size: 12pt;
+    opacity: .8;
+}
+
+.balanceInfo__header {
+    margin-bottom: 10px;
+}
+
+.kickModalWindow {
+    background-color: white;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 70vw;
+    height: 70vh;
+    margin: auto;
+    padding: 30px;
+    text-align: center;
+}
+
+.kickModalWindow__body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalBody__image img {
+    width: 100%;
+}
+
+.modalBody__image {
+    flex-basis: 50%;
+}
+
+.modalHead {
+    font-size: 24pt;
+    margin-bottom: 20px;
+}
+
+.modalBody__text {
+    font-size: 16pt;
+    flex-basis: 50%;
+}
+
+.modalBody__text div {
+    margin-top: 20px;
+}
+
+.modalBody__text div a:hover {
+    text-decoration: none;
+}
+
+.userOrder {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border: 2px solid #48c4d1;
+    background-color: #2fb9b2;
+    padding: 15px;
+    overflow: hidden;
+}
+
+.extra {
+    display: flex;
+    align-items: center;
+}
+
+.userOrder__name {
+    flex-basis: 100%;
+    text-align: left;
+    color: white;
+    font-size: 18pt;
+    margin-right: 10px;
+}
+
+.extra {
+    position: relative;
+    right: -200px;
+    transition: .3s;
+}
+
+.extra__btns {
+    width: 100px;
+}
+
+.userOrder:hover .extra {
+    right: 0;
+    transition: .3s;
+}
+
+.extra_button {
+    padding: 5px 10px;
+}
+
+.count {
+    font-size: 18pt;
+    text-align: left;
+}
+
+.count div {
+    margin-bottom: 15px
+}
+
+.extra__data_hidden {
+    visibility: hidden;
+    display: none
+}
+
+.cardInfo {
+    font-size: 18pt;
+    text-align: left;
+}
+
+.checkFood__header {
+    margin: 20px 0 10px 0;
+    font-size: 24pt;
+}
+
+.cardInfo__cardNum {
+    margin: 20px 0;
+}
+
+.section_body__menu {
+    font-size: 18pt;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: .3s;
+    color: white;
+    text-align: left;
+    padding: 20px 30px;
+}
+
+.section_body__menu ul {
+    list-style: disc;
+}
+
+.section_body__menu ul li {
+    margin-bottom: 15px;
+}
+
+.cardInfo__header {
+    text-align: center;
+    font-size: 32px;
+    margin: 20px 0 10px 0;
 }

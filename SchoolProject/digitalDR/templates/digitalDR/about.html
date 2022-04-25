@@ -66,41 +66,8 @@
         <h2>Надоели проблемы со столовой?<br></h2><strong>Мы их решим!</strong>
     </div>
     <div class="auth_block">
-        <a class="btn auth_btn" href="{% url 'login' %}">Войти</a>
-        <button class="btn reg_btn" onclick="viewRegForm()">Зарегистрироваться</button>
-    </div>
-</section>
-<section class="registration">
-    <div class="form_reg">
-        {% csrf_token %}
-        <div class="form_reg__header">
-            Регистрация
-        </div>
-        <div class="demarcation">
-            <img src="/static/images/demarcation.svg" alt="demarcation">
-        </div>
-        <div class="form_reg__body">
-            <div class="full_name">
-                <input type="text" name="first_name" placeholder="Имя" required="" id="id_first_name">
-                <input type="text" name="last_name" placeholder="Фамилия" required="" id="id_last_name">
-            </div>
-            <input type="text" name="email" placeholder="Email" required="" id="id_email">
-            <input type="text" name="username" placeholder="Логин" autofocus="" required="" id="id_username">
-            <input type="password" name="password1" placeholder="Пароль" required="" id="id_password1">
-            <input type="password" name="password2" placeholder="Подтвердите пароль" required="" id="id_password2">
-            <label for="id_select_class">Выберите класс: </label>
-            <select id="id_select_class">
-                <option></option>
-                {% for c in select %}
-                <option>{{c.name_class}}</option>
-                {% endfor %}
-            </select>
-            <div class="error_messages"></div>
-        </div>
-        <div class="demarcation180">
-            <img src="/static/images/demarcation.svg" alt="">
-        </div>
-        <button class="btn form_reg__footer" onclick="add_new_user()">Завершить регистрацию</button>
+        <button class="btn auth_btn" onclick="(() => {window.location.href='/login/'})()">Войти</button>
+        <button class="btn reg_btn" onclick="(() => {window.location.href='/register/'})()">Зарегистрироваться</button>
     </div>
 </section>
 </body>

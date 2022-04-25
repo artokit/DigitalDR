@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+{% block check_kick %} {{ block.super }} {% endblock %}
 <main class="flex_block">
     <section class="breakfast card_section">
         <div class="section_head">
@@ -13,9 +14,19 @@
             <div class="section_body__image">
                 <img src="{% static 'images/chicken.svg' %}" alt="chicken">
             </div>
+            <div class="section_body__menu">
+                <ul>
+                    <li>Омлет с сыром</li>
+                    <li>Масло сливочное</li>
+                    <li>Батон</li>
+                    <li>Хлеб ржаной</li>
+                    <li>Кофейный напиток со сгущенным молоком</li>
+                    Цена: 70 руб.
+                </ul>
+            </div>
         </div>
         <div class="section_footer">
-            <button class="btn">Посмотреть</button>
+            <button class="btn" onclick="hideMenuInfo(this)">Посмотреть</button>
         </div>
     </section>
     <section class="lunch card_section">
@@ -29,9 +40,19 @@
             <div class="section_body__image">
                 <img src="{% static 'images/soup.svg' %}" alt="soup">
             </div>
+            <div class="section_body__menu">
+                <ul>
+                    <li>Салат из свежих помидоров</li>
+                    <li>Щи из свежей капусты с картофелем</li>
+                    <li>Котлеты рыбные</li>
+                    <li>Пюре картофельное</li>
+                    <li>Хлеб ржаной</li>
+                </ul>
+                Цена: 80 руб.
+            </div>
         </div>
         <div class="section_footer">
-            <button class="btn">Посмотреть</button>
+            <button class="btn" onclick="hideMenuInfo(this)">Посмотреть</button>
         </div>
     </section>
     <section class="other card_section">
@@ -44,6 +65,16 @@
             </div>
             <div class="section_body__image">
                 <img src="{% static 'images/dict.svg' %}" alt="dict">
+            </div>
+            <div class="section_body__menu">
+                <ul>
+                    <li>Омлет с сыром</li>
+                    <li>Масло сливочное</li>
+                    <li>Батон</li>
+                    <li>Хлеб ржаной</li>
+                    <li>Кофейный напиток со сгущенным молоком</li>
+                    <li>Цена: 80 руб.</li>
+                </ul>
             </div>
         </div>
         <div class="section_footer">
